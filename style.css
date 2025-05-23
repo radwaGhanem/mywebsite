@@ -3,6 +3,7 @@ body {
   text-align: center;
   padding-top: 50px;
   background-color: #f0f0f0;
+  margin: 0;
 }
 
 button {
@@ -49,24 +50,37 @@ button:hover {
   }
 }
 
-.osi-layer:hover,
-.osi-layer:focus {
-  transform: scale(1.05);
-  background-color: #e0e7ff;
+.osi-layer {
+  width: 90%;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 3px solid #1e40af;
+  background-color: #eff6ff;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(30, 64, 175, 0.3);
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
   outline: none;
 }
 
-/* Sidebar navigation styles */
+.osi-layer:hover,
+.osi-layer:focus {
+  background-color: #bfdbfe;
+  box-shadow: 0 6px 15px rgba(30, 64, 175, 0.6);
+  transform: scale(1.05);
+}
+
 #sidebar-nav {
   position: fixed;
   top: 100px; /* below header */
   left: 20px;
   width: 220px;
-  background: #ffffffcc;
+  background: rgba(255, 255, 255, 0.8);
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   padding: 1rem;
-  font-family: 'Poppins', sans-serif, Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   z-index: 1000;
   max-height: 80vh;
   overflow-y: auto;
@@ -95,9 +109,8 @@ button:hover {
   text-decoration: underline;
 }
 
-/* Adjust main content to make space for sidebar */
 main {
-  margin-left: 260px; /* sidebar width + some margin */
+  margin-left: 260px; /* sidebar width + margin */
   padding: 3rem 2rem;
   max-width: 900px;
   margin-right: auto;
@@ -111,4 +124,67 @@ main {
   main {
     margin-left: 0;
   }
+}
+
+.osi-diagram {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 10px;
+  margin-top: 1rem;
+  position: relative;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative; /* ensure packet absolute positioning */
+}
+
+.arrow-down {
+  width: 2px;
+  height: 40px;
+  background: #2563eb;
+  margin: 0 auto;
+  position: relative;
+  animation: pulseArrow 2s infinite;
+}
+
+.arrow-down::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-top-color: #2563eb;
+}
+
+@keyframes pulseArrow {
+  0%, 100% { opacity: 0.5; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(5px); }
+}
+
+.packet {
+  width: 20px;
+  height: 20px;
+  background: #2563eb;
+  border-radius: 50%;
+  position: absolute;
+  left: 50%;
+  top: -30px;
+  transform: translateX(-50%);
+  box-shadow: 0 0 8px #2563eb;
+  animation: movePacket 7s linear infinite;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@keyframes movePacket {
+  0% { top: -30px; opacity: 1; }
+  14% { top: 60px; opacity: 1; }
+  28% { top: 140px; opacity: 1; }
+  42% { top: 220px; opacity: 1; }
+  56% { top: 300px; opacity: 1; }
+  70% { top: 380px; opacity: 1; }
+  84% { top: 460px; opacity: 1; }
+  100% { top: 540px; opacity: 0; }
 }
