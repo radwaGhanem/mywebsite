@@ -5,7 +5,7 @@ function showMessage() {
 showMessage();
 
 // Animate .section elements on scroll using IntersectionObserver
-const sections = document.querySelectorAll('.section');
+const sectionElements = document.querySelectorAll('.section');
 
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
@@ -16,11 +16,11 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.1 });
 
-sections.forEach(section => {
+sectionElements.forEach(section => {
   observer.observe(section);
 });
 
-// Quiz logic below (same as before)
+// Quiz logic below
 
 const quizData = [
   {
@@ -104,5 +104,43 @@ function showScore() {
   nextBtn.style.display = 'none';
 }
 
+// Add click event listener for next button
+nextBtn.addEventListener('click', nextQuestion);
+
 loadQuestion();
 
+// Smooth scrolling on sidebar nav links
+document.querySelectorAll('#sidebar-nav a').forEach(link => {
+  link.addEventListener('click', e => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href').substring(1);
+    const targetSection = document.getElementById(targetId);
+    if (targetSection) {
+      window.scrollTo({
+        top: targetSection.offsetTop - 80, // adjust for header height
+        behavior: 'smooth',
+      });
+    }
+  });
+});
+
+// Active link highlighting on scroll
+const navLinks = document.querySelectorAll('#sidebar-nav a');
+const sectionIds = Array.from(navLinks).map(link => document.getElementById(link.getAttribute('href').substring(1)));
+
+window.addEventListener('scroll', () => {
+  const scrollPos = window.scrollY + 100; // slightly below top
+
+  let currentIndex = sectionIds.length - 1;
+  for (let i = 0; i < sectionIds.length; i++) {
+    if (scrollPos < sectionIds[i].offsetTop) {
+      currentIndex = i - 1;
+      break;
+    }
+  }
+
+  navLinks.forEach(link => link.classList.remove('active'));
+  if (currentIndex >= 0) {
+    navLinks[currentIndex].classList.add('active');
+  }
+});
