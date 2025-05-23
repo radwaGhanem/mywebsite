@@ -277,6 +277,36 @@
         padding: 1.5rem;
       }
     }
+
+    /* Sidebar navigation */
+    #sidebar-nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    #sidebar-nav ul li a {
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      border: 2px solid transparent;
+      display: inline-block;
+    }
+
+    #sidebar-nav ul li a:hover,
+    #sidebar-nav ul li a:focus {
+      background-color: #2563eb;
+      color: white;
+      outline: none;
+      border-color: #1d4ed8;
+    }
+
   </style>
 </head>
 <body>
@@ -287,8 +317,20 @@
   </header>
 
   <main>
+    <nav id="sidebar-nav" aria-label="OSI Model Navigation">
+      <ul>
+        <li><a href="#physical-layer" class="nav-link">Physical Layer</a></li>
+        <li><a href="#data-link-layer" class="nav-link">Data Link Layer</a></li>
+        <li><a href="#network-layer" class="nav-link">Network Layer</a></li>
+        <li><a href="#transport-layer" class="nav-link">Transport Layer</a></li>
+        <li><a href="#session-layer" class="nav-link">Session Layer</a></li>
+        <li><a href="#presentation-layer" class="nav-link">Presentation Layer</a></li>
+        <li><a href="#application-layer" class="nav-link">Application Layer</a></li>
+      </ul>
+    </nav>
+
     <div class="section">
-      <h2>🌐 What is the OSI Model?</h2>
+      <h2 id="what-is-osi">🌐 What is the OSI Model?</h2>
       <p>
         The OSI (Open Systems Interconnection) Model is a conceptual framework used to understand and implement interoperable network protocols. It is divided into 7 layers, each with specific functions.
       </p>
@@ -297,86 +339,70 @@
     <div class="section">
       <h2>🧱 The 7 Layers of the OSI Model</h2>
 
-      <div class="osi-layer" tabindex="0">
+      <div class="osi-layer" tabindex="0" id="application-layer">
         <strong>7. Application Layer:</strong> Interfaces directly with user applications (e.g., browsers, email).
         <div class="extra-info">This layer interacts with software applications and provides network services to end-user processes.</div>
       </div>
-      <div class="osi-layer" tabindex="0">
+      <div class="osi-layer" tabindex="0" id="presentation-layer">
         <strong>6. Presentation Layer:</strong> Translates data formats (e.g., encryption, compression).
         <div class="extra-info">It formats or translates data for the application layer, including encryption and compression.</div>
       </div>
-      <div class="osi-layer" tabindex="0">
+      <div class="osi-layer" tabindex="0" id="session-layer">
         <strong>5. Session Layer:</strong> Manages sessions between devices (start/end communication).
         <div class="extra-info">Establishes, manages, and terminates sessions between communicating hosts.</div>
       </div>
-      <div class="osi-layer" tabindex="0">
-        <strong>4. Transport Layer:</strong> Ensures reliable transmission (TCP/UDP protocols).
-        <div class="extra-info">Provides end-to-end communication control and error checking.</div>
+      <div class="osi-layer" tabindex="0" id="transport-layer">
+        <strong>4. Transport Layer:</strong> Provides reliable data transfer and error recovery (TCP/UDP).
+        <div class="extra-info">Ensures error-free delivery of data with flow control and segmentation.</div>
       </div>
-      <div class="osi-layer" tabindex="0">
-        <strong>3. Network Layer:</strong> Handles IP addressing and routing (e.g., IP, routers).
-        <div class="extra-info">Determines how data is sent to the receiving device via logical addressing.</div>
+      <div class="osi-layer" tabindex="0" id="network-layer">
+        <strong>3. Network Layer:</strong> Handles routing and forwarding of data packets.
+        <div class="extra-info">Responsible for logical addressing and path determination (IP addressing).</div>
       </div>
-      <div class="osi-layer" tabindex="0">
-        <strong>2. Data Link Layer:</strong> Responsible for MAC addressing and frame transmission.
-        <div class="extra-info">Ensures error-free transfer of data frames between nodes over the physical layer.</div>
+      <div class="osi-layer" tabindex="0" id="data-link-layer">
+        <strong>2. Data Link Layer:</strong> Controls physical addressing and error detection in frames.
+        <div class="extra-info">Provides node-to-node data transfer and error checking (MAC addresses).</div>
       </div>
-      <div class="osi-layer" tabindex="0">
-        <strong>1. Physical Layer:</strong> Transmits raw bits over physical media (cables, switches).
-        <div class="extra-info">Deals with the physical connection to the network and the transmission of bits.</div>
-      </div>
-
-      <!-- Animated arrows to show data flow -->
-      <div class="arrow-container" aria-hidden="true">
-        <div class="arrow"></div>
-        <div class="arrow"></div>
-        <div class="arrow"></div>
+      <div class="osi-layer" tabindex="0" id="physical-layer">
+        <strong>1. Physical Layer:</strong> Transmits raw bit streams over physical media (cables, wireless).
+        <div class="extra-info">Defines electrical, mechanical, and procedural aspects of physical communication.</div>
       </div>
     </div>
 
-    <section id="quiz-section" class="section">
-      <h2>📝 Quick Quiz</h2>
+    <div class="arrow-container" aria-hidden="true">
+      <span class="arrow"></span>
+      <span class="arrow"></span>
+      <span class="arrow"></span>
+    </div>
+
+    <section id="quiz-section" class="section" aria-labelledby="quiz-title">
+      <h2 id="quiz-title">📚 Test Your Knowledge: OSI Model Quiz</h2>
       <div id="quiz-container" role="region" aria-live="polite" aria-atomic="true">
-        <!-- Quiz content will be injected here -->
+        <p id="question"></p>
+        <div id="answers">
+          <!-- Buttons inserted here dynamically -->
+        </div>
+        <button id="next-btn" disabled aria-disabled="true" aria-label="Next question">Next</button>
+        <div id="progress-bar" aria-label="Quiz progress">
+          <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+        </div>
+        <div id="score" aria-live="polite"></div>
       </div>
-      <div id="progress-bar" aria-label="Quiz progress">
-        <div id="progress"></div>
-      </div>
-      <button id="next-btn" disabled>Next Question</button>
-      <div id="score" aria-live="polite"></div>
     </section>
   </main>
 
   <footer>
-    &copy; 2025 OSI Model Learning. All rights reserved.
+    &copy; 2025 OSI Model Education. All rights reserved.
   </footer>
 
   <script>
-    // Scroll fade-in for sections
-    const sections = document.querySelectorAll('.section');
-    const options = {
-      threshold: 0.1
-    };
-    const observer = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, options);
-
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-
-    // OSI layer expandable info toggle
+    // Make OSI layers expandable on click and keyboard
     const osiLayers = document.querySelectorAll('.osi-layer');
     osiLayers.forEach(layer => {
       layer.addEventListener('click', () => {
         layer.classList.toggle('expanded');
       });
-      layer.addEventListener('keydown', (e) => {
+      layer.addEventListener('keydown', e => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           layer.classList.toggle('expanded');
@@ -384,94 +410,89 @@
       });
     });
 
-    // Quiz data and logic
-    const quizContainer = document.getElementById('quiz-container');
-    const nextBtn = document.getElementById('next-btn');
-    const scoreDisplay = document.getElementById('score');
-    const progress = document.getElementById('progress');
-
-    const quizQuestions = [
+    // Quiz data
+    const quizData = [
       {
-        question: "Which OSI layer is responsible for routing?",
-        answers: ["Network Layer", "Transport Layer", "Data Link Layer", "Physical Layer"],
-        correct: 0
+        question: "Which OSI layer is responsible for routing packets?",
+        answers: ["Network Layer", "Transport Layer", "Data Link Layer", "Session Layer"],
+        correct: "Network Layer"
       },
       {
-        question: "At which OSI layer does encryption typically occur?",
-        answers: ["Presentation Layer", "Session Layer", "Application Layer", "Network Layer"],
-        correct: 0
+        question: "At which layer does encryption typically occur?",
+        answers: ["Presentation Layer", "Physical Layer", "Application Layer", "Network Layer"],
+        correct: "Presentation Layer"
       },
       {
-        question: "Which layer transmits raw bits over cables?",
-        answers: ["Physical Layer", "Data Link Layer", "Transport Layer", "Application Layer"],
-        correct: 0
+        question: "Which layer provides reliable end-to-end communication?",
+        answers: ["Transport Layer", "Physical Layer", "Session Layer", "Application Layer"],
+        correct: "Transport Layer"
       },
       {
-        question: "What is the main function of the Transport Layer?",
-        answers: ["Reliable data transmission", "Data formatting", "Physical connection", "Routing"],
-        correct: 0
+        question: "The Physical Layer is responsible for:",
+        answers: ["Transmitting raw bits", "Routing packets", "Error detection", "Managing sessions"],
+        correct: "Transmitting raw bits"
       },
       {
-        question: "Which OSI layer manages sessions between devices?",
-        answers: ["Session Layer", "Application Layer", "Data Link Layer", "Network Layer"],
-        correct: 0
+        question: "Which layer manages sessions between devices?",
+        answers: ["Session Layer", "Data Link Layer", "Presentation Layer", "Network Layer"],
+        correct: "Session Layer"
       }
     ];
+
+    const questionEl = document.getElementById('question');
+    const answersEl = document.getElementById('answers');
+    const nextBtn = document.getElementById('next-btn');
+    const progress = document.getElementById('progress');
+    const scoreEl = document.getElementById('score');
 
     let currentQuestion = 0;
     let score = 0;
 
     function loadQuestion() {
-      const q = quizQuestions[currentQuestion];
-      quizContainer.innerHTML = `<p><strong>Q${currentQuestion + 1}:</strong> ${q.question}</p>`;
-      q.answers.forEach((answer, index) => {
+      const current = quizData[currentQuestion];
+      questionEl.textContent = current.question;
+      answersEl.innerHTML = '';
+      current.answers.forEach(answer => {
         const btn = document.createElement('button');
-        btn.classList.add('answer-btn');
+        btn.className = 'answer-btn';
         btn.textContent = answer;
-        btn.setAttribute('data-index', index);
-        btn.type = 'button';
-        btn.addEventListener('click', selectAnswer);
-        quizContainer.appendChild(btn);
+        btn.setAttribute('type', 'button');
+        btn.addEventListener('click', () => selectAnswer(btn, current.correct));
+        answersEl.appendChild(btn);
       });
       nextBtn.disabled = true;
-
-      // Update progress bar
-      const progressPercent = ((currentQuestion) / quizQuestions.length) * 100;
-      progress.style.width = progressPercent + '%';
-
-      scoreDisplay.textContent = '';
+      nextBtn.setAttribute('aria-disabled', 'true');
+      scoreEl.textContent = '';
+      updateProgress();
     }
 
-    function selectAnswer(e) {
-      const selectedBtn = e.target;
-      const selectedIndex = parseInt(selectedBtn.getAttribute('data-index'));
-      const correctIndex = quizQuestions[currentQuestion].correct;
-
+    function selectAnswer(selectedBtn, correctAnswer) {
       const buttons = document.querySelectorAll('.answer-btn');
       buttons.forEach(btn => {
         btn.disabled = true;
-        btn.classList.remove('correct', 'incorrect');
+        if (btn.textContent === correctAnswer) {
+          btn.classList.add('correct');
+        }
       });
 
-      if (selectedIndex === correctIndex) {
-        selectedBtn.classList.add('correct');
+      if (selectedBtn.textContent === correctAnswer) {
         score++;
       } else {
         selectedBtn.classList.add('incorrect');
-        // Highlight the correct answer
-        buttons.forEach(btn => {
-          if (parseInt(btn.getAttribute('data-index')) === correctIndex) {
-            btn.classList.add('correct');
-          }
-        });
       }
-
       nextBtn.disabled = false;
+      nextBtn.setAttribute('aria-disabled', 'false');
+    }
+
+    function updateProgress() {
+      const progressPercent = ((currentQuestion) / quizData.length) * 100;
+      progress.style.width = progressPercent + '%';
+      progress.setAttribute('aria-valuenow', progressPercent.toFixed(0));
     }
 
     nextBtn.addEventListener('click', () => {
       currentQuestion++;
-      if (currentQuestion < quizQuestions.length) {
+      if (currentQuestion < quizData.length) {
         loadQuestion();
       } else {
         showScore();
@@ -479,13 +500,30 @@
     });
 
     function showScore() {
-      quizContainer.innerHTML = `<p>Quiz complete! You scored ${score} out of ${quizQuestions.length}.</p>`;
-      nextBtn.disabled = true;
+      questionEl.textContent = `Quiz complete! Your score: ${score} out of ${quizData.length}`;
+      answersEl.innerHTML = '';
+      nextBtn.style.display = 'none';
       progress.style.width = '100%';
-      scoreDisplay.textContent = '';
+      progress.setAttribute('aria-valuenow', '100');
+      scoreEl.textContent = 'Thanks for playing!';
     }
 
+    // Initialize first question
     loadQuestion();
+
+    // Intersection observer to animate sections on scroll
+    const sections = document.querySelectorAll('.section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    sections.forEach(section => observer.observe(section));
+
   </script>
 
 </body>
