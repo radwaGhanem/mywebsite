@@ -81,9 +81,14 @@ function loadQuestion() {
   nextBtn.disabled = true;
   scoreEl.textContent = "";
   explanationEl.textContent = "";
+  explanationEl.classList.remove('visible');
   const currentQuestion = quizData[currentQuestionIndex];
   questionEl.textContent = currentQuestion.question;
   answersEl.innerHTML = "";
+
+  // Update progress bar
+  const progress = ((currentQuestionIndex) / quizData.length) * 100;
+  document.getElementById('progress').style.width = `${progress}%`;
 
   currentQuestion.answers.forEach(answer => {
     const btn = document.createElement('button');
@@ -104,17 +109,18 @@ function selectAnswer(button, correct, explanation) {
   });
 
   if (correct) {
-    button.style.backgroundColor = 'green';
+    button.classList.add('correct');
     button.setAttribute('aria-pressed', 'true');
     score++;
   } else {
-    button.style.backgroundColor = 'red';
+    button.classList.add('incorrect');
     button.setAttribute('aria-pressed', 'true');
   }
 
   explanationEl.textContent = explanation;
-
+  explanationEl.classList.add('visible');
   nextBtn.disabled = false;
+  nextBtn.focus();
 }
 
 function nextQuestion() {
@@ -130,9 +136,13 @@ function showScore() {
   questionEl.textContent = `Quiz Completed! Your score: ${score} / ${quizData.length}`;
   answersEl.innerHTML = '';
   explanationEl.textContent = '';
+  explanationEl.classList.remove('visible');
   nextBtn.style.display = 'none';
   restartBtn.style.display = 'inline-block';
-  scoreEl.textContent = "";
+  scoreEl.textContent = `You got ${score} out of ${quizData.length} questions correct!`;
+  
+  // Update progress bar to 100%
+  document.getElementById('progress').style.width = '100%';
 }
 
 function restartQuiz() {
@@ -277,4 +287,92 @@ layers.forEach(layer => {
   layer.addEventListener('mouseleave', () => {
     packet.style.animationPlayState = 'running';
   });
+});
+
+// Search functionality
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+// Create searchable content
+const searchableContent = [
+  ...Array.from(document.querySelectorAll('.osi-layer')).map(layer => ({
+    title: layer.querySelector('h3').textContent,
+    content: layer.querySelector('.layer-info').textContent,
+    extraInfo: layer.querySelector('.extra-info').textContent,
+    element: layer
+  })),
+  {
+    title: 'OSI Model Overview',
+    content: document.querySelector('#what-is-osi + p').textContent,
+    element: document.querySelector('#what-is-osi').parentElement
+  }
+];
+
+function highlightText(text, searchTerm) {
+  if (!searchTerm) return text;
+  const regex = new RegExp(`(${searchTerm})`, 'gi');
+  return text.replace(regex, '<span class="highlight">$1</span>');
+}
+
+function performSearch(searchTerm) {
+  if (!searchTerm.trim()) {
+    searchResults.classList.remove('visible');
+    return;
+  }
+
+  const results = searchableContent.filter(item => {
+    const searchableText = `${item.title} ${item.content} ${item.extraInfo || ''}`.toLowerCase();
+    return searchableText.includes(searchTerm.toLowerCase());
+  });
+
+  if (results.length > 0) {
+    searchResults.innerHTML = results.map(item => `
+      <div class="search-result-item" data-target="${item.element.id || ''}">
+        <strong>${highlightText(item.title, searchTerm)}</strong>
+        <p>${highlightText(item.content, searchTerm)}</p>
+      </div>
+    `).join('');
+    searchResults.classList.add('visible');
+
+    // Add click handlers to results
+    searchResults.querySelectorAll('.search-result-item').forEach(result => {
+      result.addEventListener('click', () => {
+        const targetId = result.dataset.target;
+        if (targetId) {
+          const targetElement = document.getElementById(targetId);
+          if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            targetElement.classList.add('highlight-section');
+            setTimeout(() => targetElement.classList.remove('highlight-section'), 2000);
+          }
+        }
+        searchResults.classList.remove('visible');
+        searchInput.value = '';
+      });
+    });
+  } else {
+    searchResults.innerHTML = '<div class="search-result-item">No results found</div>';
+    searchResults.classList.add('visible');
+  }
+}
+
+// Debounce search input
+let searchTimeout;
+searchInput.addEventListener('input', (e) => {
+  clearTimeout(searchTimeout);
+  searchTimeout = setTimeout(() => performSearch(e.target.value), 300);
+});
+
+// Close search results when clicking outside
+document.addEventListener('click', (e) => {
+  if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+    searchResults.classList.remove('visible');
+  }
+});
+
+// Add keyboard navigation for search results
+searchInput.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    searchResults.classList.remove('visible');
+  }
 });
