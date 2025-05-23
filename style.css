@@ -856,7 +856,7 @@ header {
 }
 
 /* Matching question animations */
-.matching-pair {
+.matching-container {
   animation: fadeInScale 0.5s ease-out;
   animation-fill-mode: both;
 }
