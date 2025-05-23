@@ -23,30 +23,39 @@ sectionElements.forEach(section => {
 // Quiz data and logic
 const quizData = [
   {
-    question: "Which OSI layer is responsible for data encryption?",
+    question: "Which protocol operates at the Application Layer?",
     answers: [
-      { text: "Presentation Layer", correct: true },
-      { text: "Session Layer", correct: false },
-      { text: "Network Layer", correct: false },
-      { text: "Transport Layer", correct: false }
+      { text: "HTTP", correct: true, explanation: "HTTP is an Application layer protocol used for web communications." },
+      { text: "IP", correct: false, explanation: "IP operates at the Network layer, responsible for routing." },
+      { text: "Ethernet", correct: false, explanation: "Ethernet is a Data Link layer protocol, handling framing and MAC addressing." },
+      { text: "TCP", correct: false, explanation: "TCP is a Transport layer protocol, providing reliable connection-oriented communication." }
     ]
   },
   {
-    question: "Which layer handles routing between devices?",
+    question: "Which device primarily operates at the Data Link layer?",
     answers: [
-      { text: "Network Layer", correct: true },
-      { text: "Data Link Layer", correct: false },
-      { text: "Physical Layer", correct: false },
-      { text: "Application Layer", correct: false }
+      { text: "Switch", correct: true, explanation: "Switches operate at the Data Link layer to forward frames based on MAC addresses." },
+      { text: "Router", correct: false, explanation: "Routers operate at the Network layer to route packets between networks." },
+      { text: "Hub", correct: false, explanation: "Hubs operate at the Physical layer, simply repeating signals." },
+      { text: "Firewall", correct: false, explanation: "Firewalls can operate on multiple layers, but primarily on Network and Transport layers." }
     ]
   },
   {
-    question: "Which OSI layer is responsible for establishing connections?",
+    question: "What is the primary function of the Transport Layer?",
     answers: [
-      { text: "Session Layer", correct: true },
-      { text: "Transport Layer", correct: false },
-      { text: "Network Layer", correct: false },
-      { text: "Data Link Layer", correct: false }
+      { text: "Segmentation and flow control", correct: true, explanation: "The Transport layer manages segmentation, flow control, and ensures reliable transmission." },
+      { text: "Physical signal transmission", correct: false, explanation: "Physical layer deals with the transmission of raw bits over a physical medium." },
+      { text: "Data encryption", correct: false, explanation: "Data encryption mainly occurs at the Presentation layer." },
+      { text: "Routing packets", correct: false, explanation: "Routing is the responsibility of the Network layer." }
+    ]
+  },
+  {
+    question: "Scenario: A device cannot resolve IP addresses to MAC addresses. At which OSI layer is the problem?",
+    answers: [
+      { text: "Data Link Layer", correct: true, explanation: "Address resolution (e.g., ARP) occurs at the Data Link layer." },
+      { text: "Network Layer", correct: false, explanation: "The Network layer handles IP addressing and routing." },
+      { text: "Transport Layer", correct: false, explanation: "Transport layer manages end-to-end connections and data delivery." },
+      { text: "Session Layer", correct: false, explanation: "Session layer manages sessions and dialogs between applications." }
     ]
   }
 ];
@@ -58,6 +67,7 @@ const questionEl = document.getElementById('question');
 const answersEl = document.getElementById('answers');
 const nextBtn = document.getElementById('next-btn');
 const scoreEl = document.getElementById('score');
+const explanationEl = document.getElementById('explanation');
 
 // Create and add restart button dynamically (hidden initially)
 const restartBtn = document.createElement('button');
@@ -70,6 +80,7 @@ nextBtn.parentNode.appendChild(restartBtn);
 function loadQuestion() {
   nextBtn.disabled = true;
   scoreEl.textContent = "";
+  explanationEl.textContent = "";
   const currentQuestion = quizData[currentQuestionIndex];
   questionEl.textContent = currentQuestion.question;
   answersEl.innerHTML = "";
@@ -80,12 +91,12 @@ function loadQuestion() {
     btn.classList.add('answer-btn');
     btn.setAttribute('type', 'button');
     btn.setAttribute('aria-pressed', 'false');
-    btn.onclick = () => selectAnswer(btn, answer.correct);
+    btn.onclick = () => selectAnswer(btn, answer.correct, answer.explanation);
     answersEl.appendChild(btn);
   });
 }
 
-function selectAnswer(button, correct) {
+function selectAnswer(button, correct, explanation) {
   const allButtons = answersEl.querySelectorAll('button');
   allButtons.forEach(btn => {
     btn.disabled = true;
@@ -100,6 +111,9 @@ function selectAnswer(button, correct) {
     button.style.backgroundColor = 'red';
     button.setAttribute('aria-pressed', 'true');
   }
+
+  explanationEl.textContent = explanation;
+
   nextBtn.disabled = false;
 }
 
@@ -115,6 +129,7 @@ function nextQuestion() {
 function showScore() {
   questionEl.textContent = `Quiz Completed! Your score: ${score} / ${quizData.length}`;
   answersEl.innerHTML = '';
+  explanationEl.textContent = '';
   nextBtn.style.display = 'none';
   restartBtn.style.display = 'inline-block';
   scoreEl.textContent = "";
@@ -187,7 +202,7 @@ window.addEventListener('scroll', debounce(() => {
   }
 }, 50));
 
-// Accessibility for .osi-layer toggle elements (click + keyboard)
+// Accessibility and toggle for .osi-layer elements with detailed info
 document.querySelectorAll('.osi-layer').forEach(layer => {
   layer.setAttribute('tabindex', '0');
   layer.setAttribute('role', 'button');
@@ -196,6 +211,10 @@ document.querySelectorAll('.osi-layer').forEach(layer => {
   function toggleLayer() {
     const expanded = layer.classList.toggle('expanded');
     layer.setAttribute('aria-pressed', expanded ? 'true' : 'false');
+
+    // Toggle detailed info visibility
+    const info = layer.querySelector('.layer-info');
+    if(info) info.classList.toggle('visible');
   }
 
   layer.addEventListener('click', toggleLayer);
