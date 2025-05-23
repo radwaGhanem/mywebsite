@@ -1,16 +1,24 @@
 body {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   text-align: center;
   padding-top: 50px;
   background-color: #f0f0f0;
 }
+
 button {
   padding: 10px 20px;
   background-color: #3498db;
   color: white;
   border: none;
   border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
+
+button:hover {
+  background-color: #2980b9;
+}
+
 .section {
   opacity: 0;
   transform: translateY(20px);
@@ -21,17 +29,86 @@ button {
   opacity: 1;
   transform: translateY(0);
 }
+
 .arrow {
   animation: slideArrow 2s infinite;
 }
+
 @keyframes slideArrow {
-  0% {opacity: 0; transform: translateX(-10px) rotate(-45deg);}
-  50% {opacity: 1; transform: translateX(0) rotate(-45deg);}
-  100% {opacity: 0; transform: translateX(10px) rotate(-45deg);}
+  0% {
+    opacity: 0;
+    transform: translateX(-10px) rotate(-45deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(0) rotate(-45deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(10px) rotate(-45deg);
+  }
 }
+
 .osi-layer:hover,
 .osi-layer:focus {
   transform: scale(1.05);
   background-color: #e0e7ff;
+  outline: none;
 }
 
+/* Sidebar navigation styles */
+#sidebar-nav {
+  position: fixed;
+  top: 100px; /* below header */
+  left: 20px;
+  width: 220px;
+  background: #ffffffcc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  padding: 1rem;
+  font-family: 'Poppins', sans-serif, Arial, sans-serif;
+  z-index: 1000;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+#sidebar-nav ul {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+#sidebar-nav li {
+  margin-bottom: 12px;
+}
+
+#sidebar-nav a {
+  text-decoration: none;
+  color: #2563eb;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+#sidebar-nav a:hover,
+#sidebar-nav a.active {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
+
+/* Adjust main content to make space for sidebar */
+main {
+  margin-left: 260px; /* sidebar width + some margin */
+  padding: 3rem 2rem;
+  max-width: 900px;
+  margin-right: auto;
+}
+
+/* Responsive: hide sidebar on smaller screens */
+@media (max-width: 900px) {
+  #sidebar-nav {
+    display: none;
+  }
+  main {
+    margin-left: 0;
+  }
+}
