@@ -29,6 +29,16 @@
         <li><a href="#session-layer" class="nav-link">Session Layer</a></li>
         <li><a href="#presentation-layer" class="nav-link">Presentation Layer</a></li>
         <li><a href="#application-layer" class="nav-link">Application Layer</a></li>
+        <li><a href="#tcpip-model" class="nav-link">TCP/IP Model</a></li>
+        <li><a href="#progress-tracker" class="nav-link">Your Learning Progress</a></li>
+        <li><a href="#network-device-roleplay" class="nav-link">Network Device Role Play</a></li>
+        <li><a href="#build-a-packet" class="nav-link">Build a Packet Activity</a></li>
+        <li><a href="#protocol-explorations" class="nav-link">Protocol Explorations</a></li>
+        <li><a href="#subnetting-tool" class="nav-link">Subnetting Tool</a></li>
+        <li><a href="#network-topologies" class="nav-link">Network Topologies Visualizer</a></li>
+        <li><a href="#network-security" class="nav-link">Network Security</a></li>
+        <li><a href="#command-line-basics" class="nav-link">Command Line Basics</a></li>
+        <li><a href="#wireless-networking" class="nav-link">Wireless Networking</a></li>
       </ul>
     </nav>
 
@@ -88,22 +98,6 @@
       </div>
     </section>
 
-    <section id="flashcards-section" class="section">
-      <h2>OSI Model Flashcards</h2>
-      <div id="flashcard-container" aria-label="OSI Model Flashcards">
-        <!-- Flashcards will be loaded here by JavaScript -->
-        <div class="flashcard">
-          <div class="flashcard-front">
-            <h3>Layer Name</h3>
-          </div>
-          <div class="flashcard-back">
-            <p>Description and protocols</p>
-          </div>
-        </div>
-      </div>
-      <button id="next-flashcard-btn" aria-label="Next Flashcard">Next Flashcard</button>
-    </section>
-
     <section id="progress-tracker" class="section">
       <h2>Your Learning Progress</h2>
       <div id="progress-dashboard" aria-label="Learning Progress Dashboard">
@@ -115,31 +109,70 @@
       </div>
     </section>
 
-    <section id="network-simulation" class="section">
-      <h2>Network Simulation Tool</h2>
-      <div id="simulation-area" aria-label="Network Simulation Area">
-        <!-- Simulation interface will be built here by JavaScript -->
-        <p>Simulation interface coming soon!</p>
+    <section id="network-device-roleplay" class="section">
+      <h2>Network Device Role Play</h2>
+      <div id="roleplay-container" aria-label="Network Device Role Play Area">
+        <!-- Interactive device diagram will be built here by JavaScript -->
+        <p>Explore the roles of network devices like routers and switches.</p>
       </div>
-      <!-- Simulation controls can be added here -->
+      <!-- Controls and explanations for role play can be added here -->
     </section>
 
-    <section id="user-profile" class="section">
-      <h2>Your Profile</h2>
-      <div id="profile-dashboard" aria-label="User Profile Dashboard">
-        <!-- User profile information and settings will be added here by JavaScript -->
-        <p>User profile features coming soon!</p>
+    <section id="build-a-packet" class="section">
+      <h2>Build a Packet Activity</h2>
+      <div id="packet-builder-container" aria-label="Packet Building Area">
+        <!-- Drag and drop packet builder interface will be built here by JavaScript -->
+        <p>Drag and drop headers to build a network packet layer by layer.</p>
       </div>
-      <!-- Profile controls/settings can be added here -->
+      <!-- Instructions and packet representation can be added here -->
     </section>
 
-    <section id="community-features" class="section">
-      <h2>Community Discussions</h2>
-      <div id="discussion-area" aria-label="Community Discussion Area">
-        <!-- Discussion elements will be added here by JavaScript -->
-        <p>Community features coming soon!</p>
+    <section id="protocol-explorations" class="section">
+      <h2>In-depth Protocol Explorations</h2>
+      <div id="protocols-container" aria-label="Protocol Exploration Area">
+        <!-- Interactive protocol explanations will be added here -->
+        <p>Coming soon: Detailed explanations of key network protocols.</p>
       </div>
-      <!-- Forms for adding comments/posts can be added here -->
+    </section>
+
+    <section id="subnetting-tool" class="section">
+      <h2>Subnetting Interactive Tool</h2>
+      <div id="subnetting-container" aria-label="Subnetting Tool Area">
+        <!-- Subnetting tool interface will be built here -->
+        <p>Practice subnetting and visualize network address ranges.</p>
+      </div>
+    </section>
+
+    <section id="network-topologies" class="section">
+      <h2>Network Topologies Visualizer</h2>
+      <div id="topologies-container" aria-label="Network Topologies Area">
+        <!-- Interactive topology diagrams will be added here -->
+        <p>Visualize different network layouts like Star, Bus, and Ring.</p>
+      </div>
+    </section>
+
+    <section id="network-security" class="section">
+      <h2>Basic Network Security Concepts</h2>
+      <div id="security-container" aria-label="Network Security Area">
+        <!-- Content on security concepts will be added here -->
+        <p>Learn about firewalls, VPNs, and common network threats.</p>
+      </div>
+    </section>
+
+    <section id="command-line-basics" class="section">
+      <h2>Command Line Networking Basics</h2>
+      <div id="command-line-container" aria-label="Command Line Area">
+        <!-- Simulated terminal and command explanations will be added here -->
+        <p>Try out basic networking commands in a simulated terminal.</p>
+      </div>
+    </section>
+
+    <section id="wireless-networking" class="section">
+      <h2>Wireless Networking Explanation</h2>
+      <div id="wireless-container" aria-label="Wireless Networking Area">
+        <!-- Content on wireless concepts will be added here -->
+        <p>Understand Wi-Fi standards, access points, and wireless security.</p>
+      </div>
     </section>
 
     <div class="arrow-container" aria-hidden="true">
@@ -164,6 +197,21 @@
           <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
         </div>
         <div id="score" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="tcpip-model" class="section">
+      <h2>The TCP/IP Model</h2>
+      <div id="tcpip-description" aria-label="TCP/IP Model Description">
+        <p>The TCP/IP model is another framework used to understand network communication. It is a simpler model than the OSI model, consisting of four layers:</p>
+        <ul>
+          <li>**Application Layer:** (Corresponds to OSI Application, Presentation, and Session Layers) - Provides network services to applications. Protocols include HTTP, FTP, SMTP, DNS.</li>
+          <li>**Transport Layer:** (Corresponds to OSI Transport Layer) - Provides end-to-end communication services. Protocols include TCP and UDP.</li>
+          <li>**Internet Layer:** (Corresponds to OSI Network Layer) - Handles logical addressing and routing of packets. The primary protocol is IP.</li>
+          <li>**Network Access Layer:** (Corresponds to OSI Data Link and Physical Layers) - Deals with the physical transmission of data and local network addressing (MAC addresses). Examples include Ethernet and Wi-Fi.</li>
+        </ul>
+        <p>While the OSI model is more theoretical and detailed, the TCP/IP model is widely used in practice due to its direct relationship with the internet protocols.</p>
+        <!-- More detailed content about TCP/IP layers, protocols, etc. will be added here -->
       </div>
     </section>
   </main>
