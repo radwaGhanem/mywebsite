@@ -19,8 +19,17 @@
       line-height: 1.6;
     }
 
+    /* Animated gradient background for header */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
     header {
-      background: linear-gradient(to right, #2563eb, #1d4ed8);
+      background: linear-gradient(270deg, #2563eb, #1d4ed8, #3b82f6, #2563eb);
+      background-size: 600% 600%;
+      animation: gradientBG 15s ease infinite;
       color: white;
       padding: 2rem;
       text-align: center;
@@ -42,12 +51,33 @@
       margin: auto;
     }
 
+    /* Fade-in animation */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
     .section {
       background-color: white;
       border-radius: 10px;
       padding: 2rem;
       margin-bottom: 2rem;
       box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .section.visible {
+      opacity: 1;
+      transform: translateY(0);
+      animation: fadeInUp 0.6s ease forwards;
     }
 
     .section h2 {
@@ -154,14 +184,27 @@
       min-width: 150px;
     }
 
+    /* Bounce effect on hover for quiz buttons */
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+    }
+
     .answer-btn:hover:not(:disabled) {
       background-color: #c7d2fe;
-      transform: scale(1.05);
+      animation: bounce 0.4s ease;
+      transform-origin: center bottom;
     }
 
     .answer-btn:disabled {
       cursor: not-allowed;
       opacity: 0.6;
+      animation: none;
+      transform: none;
     }
 
     .answer-btn.correct {
@@ -210,12 +253,12 @@
       overflow: hidden;
     }
 
-    /* Progress bar fill */
+    /* Enhanced progress bar fill animation */
     #progress {
       height: 100%;
       width: 0%;
       background-color: #2563eb;
-      transition: width 0.5s ease;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     footer {
@@ -291,148 +334,158 @@
       </div>
     </div>
 
-    <div class="section">
-      <h2>📚 Why It Matters</h2>
-      <p>
-        Understanding the OSI Model is crucial for network engineers and developers. It helps troubleshoot problems, design networks, and build protocols that communicate smoothly.
-      </p>
-    </div>
-  </main>
-
-  <!-- Quiz Section: INSIDE the body tag -->
-  <section id="quiz-section" aria-label="OSI Model Quiz">
-    <h2>OSI Model Quiz</h2>
-    <div id="quiz-container" role="region" aria-live="polite">
-      <div id="question"></div>
-      <div id="answers"></div>
-
-      <!-- Progress Bar -->
-      <div id="progress-bar" aria-hidden="true">
+    <section id="quiz-section" class="section">
+      <h2>📝 Quick Quiz</h2>
+      <div id="quiz-container" role="region" aria-live="polite" aria-atomic="true">
+        <!-- Quiz content will be injected here -->
+      </div>
+      <div id="progress-bar" aria-label="Quiz progress">
         <div id="progress"></div>
       </div>
-
-      <button id="next-btn" onclick="nextQuestion()" disabled aria-disabled="true" aria-label="Next Question">Next</button>
-      <p id="score" aria-live="polite"></p>
-    </div>
-  </section>
+      <button id="next-btn" disabled>Next Question</button>
+      <div id="score" aria-live="polite"></div>
+    </section>
+  </main>
 
   <footer>
-    Made by Radwa Ghanem | Networking Education Project
+    &copy; 2025 OSI Model Learning. All rights reserved.
   </footer>
 
   <script>
-    const quizData = [
-      {
-        question: "Which OSI layer is responsible for data encryption?",
-        answers: [
-          { text: "Presentation Layer", correct: true },
-          { text: "Session Layer", correct: false },
-          { text: "Network Layer", correct: false },
-          { text: "Transport Layer", correct: false }
-        ]
-      },
-      {
-        question: "Which layer handles routing between devices?",
-        answers: [
-          { text: "Network Layer", correct: true },
-          { text: "Data Link Layer", correct: false },
-          { text: "Physical Layer", correct: false },
-          { text: "Application Layer", correct: false }
-        ]
-      },
-      {
-        question: "Which OSI layer is responsible for establishing connections?",
-        answers: [
-          { text: "Session Layer", correct: true },
-          { text: "Transport Layer", correct: false },
-          { text: "Network Layer", correct: false },
-          { text: "Data Link Layer", correct: false }
-        ]
-      }
-    ];
-
-    let currentQuestionIndex = 0;
-    let score = 0;
-
-    const questionEl = document.getElementById('question');
-    const answersEl = document.getElementById('answers');
-    const nextBtn = document.getElementById('next-btn');
-    const scoreEl = document.getElementById('score');
-    const progressBar = document.getElementById('progress');
-
-    function loadQuestion() {
-      nextBtn.disabled = true;
-      nextBtn.setAttribute('aria-disabled', 'true');
-      scoreEl.textContent = "";
-      const currentQuestion = quizData[currentQuestionIndex];
-      questionEl.textContent = currentQuestion.question;
-      answersEl.innerHTML = "";
-
-      // Update progress bar
-      const progressPercent = ((currentQuestionIndex) / quizData.length) * 100;
-      progressBar.style.width = progressPercent + "%";
-
-      currentQuestion.answers.forEach(answer => {
-        const btn = document.createElement('button');
-        btn.textContent = answer.text;
-        btn.classList.add('answer-btn');
-        btn.setAttribute('type', 'button');
-        btn.onclick = () => selectAnswer(btn, answer.correct);
-        answersEl.appendChild(btn);
+    // Scroll fade-in for sections
+    const sections = document.querySelectorAll('.section');
+    const options = {
+      threshold: 0.1
+    };
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
       });
-    }
+    }, options);
 
-    function selectAnswer(button, correct) {
-      const allButtons = answersEl.querySelectorAll('button');
-      allButtons.forEach(btn => {
-        btn.disabled = true;
-        btn.setAttribute('aria-disabled', 'true');
-      });
+    sections.forEach(section => {
+      observer.observe(section);
+    });
 
-      if (correct) {
-        button.classList.add('correct');
-        score++;
-      } else {
-        button.classList.add('incorrect');
-      }
-      nextBtn.disabled = false;
-      nextBtn.setAttribute('aria-disabled', 'false');
-    }
-
-    function nextQuestion() {
-      currentQuestionIndex++;
-      if (currentQuestionIndex < quizData.length) {
-        loadQuestion();
-      } else {
-        showScore();
-      }
-    }
-
-    function showScore() {
-      questionEl.textContent = `Quiz Completed! Your score: ${score} / ${quizData.length}`;
-      answersEl.innerHTML = '';
-      nextBtn.style.display = 'none';
-      // Fill progress bar fully on completion
-      progressBar.style.width = "100%";
-    }
-
-    // Initialize the quiz
-    loadQuestion();
-
-    // Expand/collapse functionality for OSI layers
+    // OSI layer expandable info toggle
     const osiLayers = document.querySelectorAll('.osi-layer');
     osiLayers.forEach(layer => {
       layer.addEventListener('click', () => {
         layer.classList.toggle('expanded');
       });
-      // Keyboard accessible toggle
-      layer.addEventListener('keydown', e => {
-        if(e.key === 'Enter' || e.key === ' ') {
+      layer.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           layer.classList.toggle('expanded');
         }
       });
     });
+
+    // Quiz data and logic
+    const quizContainer = document.getElementById('quiz-container');
+    const nextBtn = document.getElementById('next-btn');
+    const scoreDisplay = document.getElementById('score');
+    const progress = document.getElementById('progress');
+
+    const quizQuestions = [
+      {
+        question: "Which OSI layer is responsible for routing?",
+        answers: ["Network Layer", "Transport Layer", "Data Link Layer", "Physical Layer"],
+        correct: 0
+      },
+      {
+        question: "At which OSI layer does encryption typically occur?",
+        answers: ["Presentation Layer", "Session Layer", "Application Layer", "Network Layer"],
+        correct: 0
+      },
+      {
+        question: "Which layer transmits raw bits over cables?",
+        answers: ["Physical Layer", "Data Link Layer", "Transport Layer", "Application Layer"],
+        correct: 0
+      },
+      {
+        question: "What is the main function of the Transport Layer?",
+        answers: ["Reliable data transmission", "Data formatting", "Physical connection", "Routing"],
+        correct: 0
+      },
+      {
+        question: "Which OSI layer manages sessions between devices?",
+        answers: ["Session Layer", "Application Layer", "Data Link Layer", "Network Layer"],
+        correct: 0
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = quizQuestions[currentQuestion];
+      quizContainer.innerHTML = `<p><strong>Q${currentQuestion + 1}:</strong> ${q.question}</p>`;
+      q.answers.forEach((answer, index) => {
+        const btn = document.createElement('button');
+        btn.classList.add('answer-btn');
+        btn.textContent = answer;
+        btn.setAttribute('data-index', index);
+        btn.type = 'button';
+        btn.addEventListener('click', selectAnswer);
+        quizContainer.appendChild(btn);
+      });
+      nextBtn.disabled = true;
+
+      // Update progress bar
+      const progressPercent = ((currentQuestion) / quizQuestions.length) * 100;
+      progress.style.width = progressPercent + '%';
+
+      scoreDisplay.textContent = '';
+    }
+
+    function selectAnswer(e) {
+      const selectedBtn = e.target;
+      const selectedIndex = parseInt(selectedBtn.getAttribute('data-index'));
+      const correctIndex = quizQuestions[currentQuestion].correct;
+
+      const buttons = document.querySelectorAll('.answer-btn');
+      buttons.forEach(btn => {
+        btn.disabled = true;
+        btn.classList.remove('correct', 'incorrect');
+      });
+
+      if (selectedIndex === correctIndex) {
+        selectedBtn.classList.add('correct');
+        score++;
+      } else {
+        selectedBtn.classList.add('incorrect');
+        // Highlight the correct answer
+        buttons.forEach(btn => {
+          if (parseInt(btn.getAttribute('data-index')) === correctIndex) {
+            btn.classList.add('correct');
+          }
+        });
+      }
+
+      nextBtn.disabled = false;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      currentQuestion++;
+      if (currentQuestion < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        showScore();
+      }
+    });
+
+    function showScore() {
+      quizContainer.innerHTML = `<p>Quiz complete! You scored ${score} out of ${quizQuestions.length}.</p>`;
+      nextBtn.disabled = true;
+      progress.style.width = '100%';
+      scoreDisplay.textContent = '';
+    }
+
+    loadQuestion();
   </script>
 
 </body>
