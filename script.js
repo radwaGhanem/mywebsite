@@ -881,3 +881,27 @@ function createOSIVisualization() {
 
 // Initialize visualization
 createOSIVisualization();
+
+// Network Device Role Play
+// JavaScript for interactive device diagram will go here
+
+// Build a Packet Activity
+// JavaScript for drag and drop packet builder will go here
+
+// Protocol Explorations
+// JavaScript for interactive protocol explanations will go here
+
+// Subnetting Interactive Tool
+// JavaScript for subnetting tool interface will go here
+
+// Network Topologies Visualizer
+// JavaScript for interactive topology diagrams will go here
+
+// Network Security Concepts
+// JavaScript for security concepts content will go here
+
+// Command Line Networking Basics
+// JavaScript for simulated terminal and command explanations will go here
+
+// Wireless Networking Explanation
+// JavaScript for wireless networking content will go here
