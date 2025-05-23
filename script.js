@@ -706,3 +706,154 @@ document.addEventListener('keydown', (e) => {
     closePopQuiz();
   }
 });
+
+// Flashcards Feature
+const flashcardData = [
+  {
+    front: "Application Layer (Layer 7)",
+    back: "Provides network services to applications. Protocols: HTTP, FTP, SMTP, DNS"
+  },
+  {
+    front: "Presentation Layer (Layer 6)",
+    back: "Translates data formats, handles encryption. Protocols: SSL/TLS, JPEG, GIF"
+  },
+  {
+    front: "Session Layer (Layer 5)",
+    back: "Manages sessions between applications. Protocols: NetBIOS, RPC"
+  },
+  {
+    front: "Transport Layer (Layer 4)",
+    back: "Ensures reliable data transfer. Protocols: TCP, UDP"
+  },
+  {
+    front: "Network Layer (Layer 3)",
+    back: "Handles routing and logical addressing. Protocols: IP, ICMP, OSPF"
+  },
+  {
+    front: "Data Link Layer (Layer 2)",
+    back: "Provides node-to-node data transfer. Protocols: Ethernet, PPP, MAC"
+  },
+  {
+    front: "Physical Layer (Layer 1)",
+    back: "Transmits raw bits over physical medium. Examples: Cables, Hubs, Repeaters"
+  }
+];
+
+let currentFlashcardIndex = 0;
+const flashcardContainer = document.getElementById('flashcard-container');
+const nextFlashcardBtn = document.getElementById('next-flashcard-btn');
+
+function createFlashcard(data) {
+  const flashcard = document.createElement('div');
+  flashcard.className = 'flashcard';
+  
+  const front = document.createElement('div');
+  front.className = 'flashcard-front';
+  front.innerHTML = `<h3>${data.front}</h3>`;
+  
+  const back = document.createElement('div');
+  back.className = 'flashcard-back';
+  back.innerHTML = `<p>${data.back}</p>`;
+  
+  flashcard.appendChild(front);
+  flashcard.appendChild(back);
+  
+  // Add click event to flip card
+  flashcard.addEventListener('click', () => {
+    flashcard.classList.toggle('flipped');
+  });
+  
+  return flashcard;
+}
+
+function showFlashcard(index) {
+  // Clear existing flashcards
+  flashcardContainer.innerHTML = '';
+  
+  // Create and show new flashcard
+  const flashcard = createFlashcard(flashcardData[index]);
+  flashcardContainer.appendChild(flashcard);
+  
+  // Add entrance animation
+  flashcard.style.animation = 'fadeInScale 0.5s ease-out';
+}
+
+function nextFlashcard() {
+  currentFlashcardIndex = (currentFlashcardIndex + 1) % flashcardData.length;
+  showFlashcard(currentFlashcardIndex);
+}
+
+// Initialize first flashcard
+showFlashcard(currentFlashcardIndex);
+
+// Add click event to next button
+nextFlashcardBtn.addEventListener('click', nextFlashcard);
+
+// Add keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ') {
+    nextFlashcard();
+  }
+});
+
+// Interactive OSI Model Visualization
+const visualizationContainer = document.getElementById('visualization-container');
+const osiLayers = [
+  { name: 'Application', color: '#FF6B6B', protocols: ['HTTP', 'FTP', 'SMTP', 'DNS'] },
+  { name: 'Presentation', color: '#4ECDC4', protocols: ['SSL/TLS', 'JPEG', 'GIF'] },
+  { name: 'Session', color: '#45B7D1', protocols: ['NetBIOS', 'RPC'] },
+  { name: 'Transport', color: '#96CEB4', protocols: ['TCP', 'UDP'] },
+  { name: 'Network', color: '#FFEEAD', protocols: ['IP', 'ICMP', 'OSPF'] },
+  { name: 'Data Link', color: '#D4A5A5', protocols: ['Ethernet', 'PPP', 'MAC'] },
+  { name: 'Physical', color: '#9B59B6', protocols: ['Cables', 'Hubs', 'Repeaters'] }
+];
+
+function createOSIVisualization() {
+  const container = document.createElement('div');
+  container.className = 'osi-visualization';
+  
+  osiLayers.forEach((layer, index) => {
+    const layerElement = document.createElement('div');
+    layerElement.className = 'visualization-layer';
+    layerElement.style.backgroundColor = layer.color;
+    layerElement.style.transform = `translateY(${index * 60}px)`;
+    
+    const layerContent = document.createElement('div');
+    layerContent.className = 'layer-content';
+    
+    const layerName = document.createElement('h3');
+    layerName.textContent = `${layer.name} Layer (${7 - index})`;
+    
+    const protocolsList = document.createElement('div');
+    protocolsList.className = 'protocols-list';
+    layer.protocols.forEach(protocol => {
+      const protocolElement = document.createElement('span');
+      protocolElement.className = 'protocol';
+      protocolElement.textContent = protocol;
+      protocolsList.appendChild(protocolElement);
+    });
+    
+    layerContent.appendChild(layerName);
+    layerContent.appendChild(protocolsList);
+    layerElement.appendChild(layerContent);
+    
+    // Add hover effect
+    layerElement.addEventListener('mouseenter', () => {
+      layerElement.style.transform = `translateY(${index * 60}px) scale(1.05)`;
+      layerElement.style.zIndex = '1';
+    });
+    
+    layerElement.addEventListener('mouseleave', () => {
+      layerElement.style.transform = `translateY(${index * 60}px)`;
+      layerElement.style.zIndex = '0';
+    });
+    
+    container.appendChild(layerElement);
+  });
+  
+  visualizationContainer.innerHTML = '';
+  visualizationContainer.appendChild(container);
+}
+
+// Initialize visualization
+createOSIVisualization();
