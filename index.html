@@ -5,311 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>OSI Model Explained</title>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background-color: #f8fafc;
-      color: #1a202c;
-      line-height: 1.6;
-    }
-
-    /* Animated gradient background for header */
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    header {
-      background: linear-gradient(270deg, #2563eb, #1d4ed8, #3b82f6, #2563eb);
-      background-size: 600% 600%;
-      animation: gradientBG 15s ease infinite;
-      color: white;
-      padding: 2rem;
-      text-align: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-    }
-
-    header h1 {
-      font-size: 2.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    header p {
-      font-size: 1.2rem;
-    }
-
-    main {
-      padding: 3rem 2rem;
-      max-width: 1000px;
-      margin: auto;
-    }
-
-    /* Fade-in animation */
-    @keyframes fadeInUp {
-      0% {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .section {
-      background-color: white;
-      border-radius: 10px;
-      padding: 2rem;
-      margin-bottom: 2rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-
-    .section.visible {
-      opacity: 1;
-      transform: translateY(0);
-      animation: fadeInUp 0.6s ease forwards;
-    }
-
-    .section h2 {
-      color: #1e40af;
-      margin-bottom: 1rem;
-    }
-
-    /* OSI Layers with hover zoom and background change */
-    .osi-layer {
-      padding: 1rem;
-      border-left: 5px solid #1e3a8a;
-      margin-bottom: 1rem;
-      background-color: #f1f5f9;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: transform 0.3s ease, background-color 0.3s ease;
-      position: relative;
-      outline: none;
-    }
-
-    .osi-layer:hover,
-    .osi-layer:focus {
-      transform: scale(1.05);
-      background-color: #e0e7ff;
-    }
-
-    /* Expandable extra info (hidden by default) */
-    .osi-layer .extra-info {
-      display: none;
-      margin-top: 0.75rem;
-      font-size: 0.9rem;
-      color: #334155;
-    }
-
-    .osi-layer.expanded .extra-info {
-      display: block;
-    }
-
-    /* Animated arrows showing data flow */
-    .arrow-container {
-      margin: 2rem 0;
-      text-align: center;
-      position: relative;
-      height: 50px;
-    }
-
-    .arrow {
-      display: inline-block;
-      width: 30px;
-      height: 30px;
-      border: solid #2563eb;
-      border-width: 0 4px 4px 0;
-      padding: 5px;
-      transform: rotate(-45deg);
-      animation: slideArrow 2s infinite;
-      margin: 0 10px;
-    }
-
-    .arrow:nth-child(2) {
-      animation-delay: 0.5s;
-    }
-
-    .arrow:nth-child(3) {
-      animation-delay: 1s;
-    }
-
-    @keyframes slideArrow {
-      0% {opacity: 0; transform: translateX(-10px) rotate(-45deg);}
-      50% {opacity: 1; transform: translateX(0) rotate(-45deg);}
-      100% {opacity: 0; transform: translateX(10px) rotate(-45deg);}
-    }
-
-    /* Quiz styles */
-    #quiz-section {
-      max-width: 600px;
-      background: white;
-      margin: 2rem auto;
-      padding: 2rem;
-      border-radius: 10px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      text-align: center;
-    }
-
-    #quiz-section h2 {
-      color: #1e40af;
-      margin-bottom: 1.5rem;
-    }
-
-    #quiz-container {
-      max-width: 500px;
-      margin: auto;
-      text-align: center;
-    }
-
-    .answer-btn {
-      margin: 5px;
-      padding: 10px 15px;
-      font-size: 16px;
-      cursor: pointer;
-      border: 1px solid #1e40af;
-      border-radius: 6px;
-      background-color: #e0e7ff;
-      transition: background-color 0.3s ease, transform 0.2s ease;
-      min-width: 150px;
-    }
-
-    /* Bounce effect on hover for quiz buttons */
-    @keyframes bounce {
-      0%, 100% {
-        transform: translateY(0);
-      }
-      50% {
-        transform: translateY(-8px);
-      }
-    }
-
-    .answer-btn:hover:not(:disabled) {
-      background-color: #c7d2fe;
-      animation: bounce 0.4s ease;
-      transform-origin: center bottom;
-    }
-
-    .answer-btn:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-      animation: none;
-      transform: none;
-    }
-
-    .answer-btn.correct {
-      background-color: #16a34a;
-      color: white;
-      border-color: #16a34a;
-    }
-
-    .answer-btn.incorrect {
-      background-color: #dc2626;
-      color: white;
-      border-color: #dc2626;
-    }
-
-    #next-btn {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    #next-btn:disabled {
-      background-color: #93c5fd;
-      cursor: not-allowed;
-    }
-
-    #score {
-      margin-top: 20px;
-      font-weight: 600;
-      font-size: 1.2rem;
-      color: #2563eb;
-    }
-
-    /* Progress bar container */
-    #progress-bar {
-      width: 100%;
-      background-color: #e5e7eb;
-      border-radius: 8px;
-      height: 15px;
-      margin: 20px 0;
-      overflow: hidden;
-    }
-
-    /* Enhanced progress bar fill animation */
-    #progress {
-      height: 100%;
-      width: 0%;
-      background-color: #2563eb;
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    footer {
-      text-align: center;
-      padding: 1rem;
-      background-color: #e5e7eb;
-      font-size: 0.9rem;
-      color: #4b5563;
-    }
-
-    @media (max-width: 768px) {
-      header h1 {
-        font-size: 2rem;
-      }
-      main {
-        padding: 1.5rem;
-      }
-    }
-
-    /* Sidebar navigation */
-    #sidebar-nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin-bottom: 3rem;
-      flex-wrap: wrap;
-    }
-
-    #sidebar-nav ul li a {
-      text-decoration: none;
-      color: #2563eb;
-      font-weight: 600;
-      padding: 8px 12px;
-      border-radius: 6px;
-      transition: background-color 0.3s ease, color 0.3s ease;
-      border: 2px solid transparent;
-      display: inline-block;
-    }
-
-    #sidebar-nav ul li a:hover,
-    #sidebar-nav ul li a:focus {
-      background-color: #2563eb;
-      color: white;
-      outline: none;
-      border-color: #1d4ed8;
-    }
-
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <button class="theme-toggle" aria-label="Toggle dark mode">🌓 Toggle Theme</button>
 
   <header>
     <h1>Learn the OSI Model</h1>
@@ -335,73 +34,48 @@
         The OSI (Open Systems Interconnection) Model is a conceptual framework used to understand and implement interoperable network protocols. It is divided into 7 layers, each with specific functions.
       </p>
     </div>
+
     <section id="osi-diagram" class="section">
-  <h2>OSI Model Layers - Interactive Diagram</h2>
-  <div class="osi-diagram">
-    <div class="osi-layer" tabindex="0" data-layer="7">
-      <h3>Application Layer</h3>
-      <p class="layer-info">Provides network services to applications. Example: HTTP, FTP.</p>
-    </div>
-    <div class="osi-layer" tabindex="0" data-layer="6">
-      <h3>Presentation Layer</h3>
-      <p class="layer-info">Translates data formats, encryption. Example: SSL/TLS.</p>
-    </div>
-    <div class="osi-layer" tabindex="0" data-layer="5">
-      <h3>Session Layer</h3>
-      <p class="layer-info">Manages sessions, connections. Example: NetBIOS.</p>
-    </div>
-    <div class="osi-layer" tabindex="0" data-layer="4">
-      <h3>Transport Layer</h3>
-      <p class="layer-info">Reliable data transfer, error correction. Example: TCP, UDP.</p>
-    </div>
-    <div class="osi-layer" tabindex="0" data-layer="3">
-      <h3>Network Layer</h3>
-      <p class="layer-info">Routing, IP addressing. Example: IP.</p>
-    </div>
-    <div class="osi-layer" tabindex="0" data-layer="2">
-      <h3>Data Link Layer</h3>
-      <p class="layer-info">MAC addressing, error detection. Example: Ethernet.</p>
-    </div>
-    <div class="osi-layer" tabindex="0" data-layer="1">
-      <h3>Physical Layer</h3>
-      <p class="layer-info">Physical transmission of data. Example: Cables, Hubs.</p>
-    </div>
-  </div>
-</section>
-
-
-    <div class="section">
-      <h2>🧱 The 7 Layers of the OSI Model</h2>
-
-      <div class="osi-layer" tabindex="0" id="application-layer">
-        <strong>7. Application Layer:</strong> Interfaces directly with user applications (e.g., browsers, email).
-        <div class="extra-info">This layer interacts with software applications and provides network services to end-user processes.</div>
+      <h2>OSI Model Layers - Interactive Diagram</h2>
+      <div class="osi-diagram">
+        <div class="packet"></div>
+        <div class="osi-layer" tabindex="0" data-layer="7">
+          <h3>Application Layer</h3>
+          <p class="layer-info">Provides network services to applications. Example: HTTP, FTP.</p>
+          <div class="extra-info">This layer interacts with software applications and provides network services to end-user processes.</div>
+        </div>
+        <div class="osi-layer" tabindex="0" data-layer="6">
+          <h3>Presentation Layer</h3>
+          <p class="layer-info">Translates data formats, encryption. Example: SSL/TLS.</p>
+          <div class="extra-info">It formats or translates data for the application layer, including encryption and compression.</div>
+        </div>
+        <div class="osi-layer" tabindex="0" data-layer="5">
+          <h3>Session Layer</h3>
+          <p class="layer-info">Manages sessions, connections. Example: NetBIOS.</p>
+          <div class="extra-info">Establishes, manages, and terminates sessions between communicating hosts.</div>
+        </div>
+        <div class="osi-layer" tabindex="0" data-layer="4">
+          <h3>Transport Layer</h3>
+          <p class="layer-info">Reliable data transfer, error correction. Example: TCP, UDP.</p>
+          <div class="extra-info">Ensures error-free delivery of data with flow control and segmentation.</div>
+        </div>
+        <div class="osi-layer" tabindex="0" data-layer="3">
+          <h3>Network Layer</h3>
+          <p class="layer-info">Routing, IP addressing. Example: IP.</p>
+          <div class="extra-info">Responsible for logical addressing and path determination (IP addressing).</div>
+        </div>
+        <div class="osi-layer" tabindex="0" data-layer="2">
+          <h3>Data Link Layer</h3>
+          <p class="layer-info">MAC addressing, error detection. Example: Ethernet.</p>
+          <div class="extra-info">Provides node-to-node data transfer and error checking (MAC addresses).</div>
+        </div>
+        <div class="osi-layer" tabindex="0" data-layer="1">
+          <h3>Physical Layer</h3>
+          <p class="layer-info">Physical transmission of data. Example: Cables, Hubs.</p>
+          <div class="extra-info">Defines electrical, mechanical, and procedural aspects of physical communication.</div>
+        </div>
       </div>
-      <div class="osi-layer" tabindex="0" id="presentation-layer">
-        <strong>6. Presentation Layer:</strong> Translates data formats (e.g., encryption, compression).
-        <div class="extra-info">It formats or translates data for the application layer, including encryption and compression.</div>
-      </div>
-      <div class="osi-layer" tabindex="0" id="session-layer">
-        <strong>5. Session Layer:</strong> Manages sessions between devices (start/end communication).
-        <div class="extra-info">Establishes, manages, and terminates sessions between communicating hosts.</div>
-      </div>
-      <div class="osi-layer" tabindex="0" id="transport-layer">
-        <strong>4. Transport Layer:</strong> Provides reliable data transfer and error recovery (TCP/UDP).
-        <div class="extra-info">Ensures error-free delivery of data with flow control and segmentation.</div>
-      </div>
-      <div class="osi-layer" tabindex="0" id="network-layer">
-        <strong>3. Network Layer:</strong> Handles routing and forwarding of data packets.
-        <div class="extra-info">Responsible for logical addressing and path determination (IP addressing).</div>
-      </div>
-      <div class="osi-layer" tabindex="0" id="data-link-layer">
-        <strong>2. Data Link Layer:</strong> Controls physical addressing and error detection in frames.
-        <div class="extra-info">Provides node-to-node data transfer and error checking (MAC addresses).</div>
-      </div>
-      <div class="osi-layer" tabindex="0" id="physical-layer">
-        <strong>1. Physical Layer:</strong> Transmits raw bit streams over physical media (cables, wireless).
-        <div class="extra-info">Defines electrical, mechanical, and procedural aspects of physical communication.</div>
-      </div>
-    </div>
+    </section>
 
     <div class="arrow-container" aria-hidden="true">
       <span class="arrow"></span>
@@ -429,136 +103,6 @@
     &copy; 2025 OSI Model Education. All rights reserved.
   </footer>
 
-  <script>
-    // Make OSI layers expandable on click and keyboard
-    const osiLayers = document.querySelectorAll('.osi-layer');
-    osiLayers.forEach(layer => {
-      layer.addEventListener('click', () => {
-        layer.classList.toggle('expanded');
-      });
-      layer.addEventListener('keydown', e => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          layer.classList.toggle('expanded');
-        }
-      });
-    });
-
-    // Quiz data
-    const quizData = [
-      {
-        question: "Which OSI layer is responsible for routing packets?",
-        answers: ["Network Layer", "Transport Layer", "Data Link Layer", "Session Layer"],
-        correct: "Network Layer"
-      },
-      {
-        question: "At which layer does encryption typically occur?",
-        answers: ["Presentation Layer", "Physical Layer", "Application Layer", "Network Layer"],
-        correct: "Presentation Layer"
-      },
-      {
-        question: "Which layer provides reliable end-to-end communication?",
-        answers: ["Transport Layer", "Physical Layer", "Session Layer", "Application Layer"],
-        correct: "Transport Layer"
-      },
-      {
-        question: "The Physical Layer is responsible for:",
-        answers: ["Transmitting raw bits", "Routing packets", "Error detection", "Managing sessions"],
-        correct: "Transmitting raw bits"
-      },
-      {
-        question: "Which layer manages sessions between devices?",
-        answers: ["Session Layer", "Data Link Layer", "Presentation Layer", "Network Layer"],
-        correct: "Session Layer"
-      }
-    ];
-
-    const questionEl = document.getElementById('question');
-    const answersEl = document.getElementById('answers');
-    const nextBtn = document.getElementById('next-btn');
-    const progress = document.getElementById('progress');
-    const scoreEl = document.getElementById('score');
-
-    let currentQuestion = 0;
-    let score = 0;
-
-    function loadQuestion() {
-      const current = quizData[currentQuestion];
-      questionEl.textContent = current.question;
-      answersEl.innerHTML = '';
-      current.answers.forEach(answer => {
-        const btn = document.createElement('button');
-        btn.className = 'answer-btn';
-        btn.textContent = answer;
-        btn.setAttribute('type', 'button');
-        btn.addEventListener('click', () => selectAnswer(btn, current.correct));
-        answersEl.appendChild(btn);
-      });
-      nextBtn.disabled = true;
-      nextBtn.setAttribute('aria-disabled', 'true');
-      scoreEl.textContent = '';
-      updateProgress();
-    }
-
-    function selectAnswer(selectedBtn, correctAnswer) {
-      const buttons = document.querySelectorAll('.answer-btn');
-      buttons.forEach(btn => {
-        btn.disabled = true;
-        if (btn.textContent === correctAnswer) {
-          btn.classList.add('correct');
-        }
-      });
-
-      if (selectedBtn.textContent === correctAnswer) {
-        score++;
-      } else {
-        selectedBtn.classList.add('incorrect');
-      }
-      nextBtn.disabled = false;
-      nextBtn.setAttribute('aria-disabled', 'false');
-    }
-
-    function updateProgress() {
-      const progressPercent = ((currentQuestion) / quizData.length) * 100;
-      progress.style.width = progressPercent + '%';
-      progress.setAttribute('aria-valuenow', progressPercent.toFixed(0));
-    }
-
-    nextBtn.addEventListener('click', () => {
-      currentQuestion++;
-      if (currentQuestion < quizData.length) {
-        loadQuestion();
-      } else {
-        showScore();
-      }
-    });
-
-    function showScore() {
-      questionEl.textContent = `Quiz complete! Your score: ${score} out of ${quizData.length}`;
-      answersEl.innerHTML = '';
-      nextBtn.style.display = 'none';
-      progress.style.width = '100%';
-      progress.setAttribute('aria-valuenow', '100');
-      scoreEl.textContent = 'Thanks for playing!';
-    }
-
-    // Initialize first question
-    loadQuestion();
-
-    // Intersection observer to animate sections on scroll
-    const sections = document.querySelectorAll('.section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    sections.forEach(section => observer.observe(section));
-
-  </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
