@@ -992,10 +992,6 @@ header {
   animation: sparkle 0.5s ease-in-out infinite;
 }
 
-/* OSI Model Visualization Styles */
-
-
-
 /* Learning Progress Tracker Styles */
 #progress-tracker {
   text-align: center;
@@ -1030,46 +1026,6 @@ header {
   color: #2563eb; /* Highlight color */
 }
 
-/* Network Device Role Play Styles */
-#network-device-roleplay {
-  text-align: center;
-}
-
-#roleplay-container {
-  width: 100%;
-  height: 500px; /* Adjust as needed */
-  border: 2px dashed var(--text-color);
-  border-radius: 10px;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  overflow: hidden;
-}
-
-/* Build a Packet Activity Styles */
-#build-a-packet {
-  text-align: center;
-}
-
-#packet-builder-container {
-  width: 100%;
-  height: 600px; /* Adjust as needed */
-  border: 2px dashed var(--text-color);
-  border-radius: 10px;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  overflow: hidden;
-}
-
 /* TCP/IP Model Styles */
 #tcpip-model {
   text-align: center;
@@ -1080,7 +1036,7 @@ header {
   /* Styles for TCP/IP model description will be added here */
 }
 
-/* Protocol Explorations Styles */
+/* Protocol Explanations Styles */
 #protocol-explorations {
   text-align: center;
 }
@@ -1088,46 +1044,6 @@ header {
 #protocols-container {
   width: 100%;
   /* Styles for protocol exploration content will be added here */
-}
-
-/* Subnetting Interactive Tool Styles */
-#subnetting-tool {
-  text-align: center;
-}
-
-#subnetting-container {
-  width: 100%;
-  height: 400px; /* Adjust as needed */
-  border: 2px dashed var(--text-color);
-  border-radius: 10px;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  overflow: hidden;
-}
-
-/* Network Topologies Visualizer Styles */
-#network-topologies {
-  text-align: center;
-}
-
-#topologies-container {
-  width: 100%;
-  height: 500px; /* Adjust as needed */
-  border: 2px dashed var(--text-color);
-  border-radius: 10px;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  overflow: hidden;
 }
 
 /* Network Security Concepts Styles */
@@ -1138,26 +1054,6 @@ header {
 #security-container {
   width: 100%;
   /* Styles for security content will be added here */
-}
-
-/* Command Line Networking Basics Styles */
-#command-line-basics {
-  text-align: center;
-}
-
-#command-line-container {
-  width: 100%;
-  height: 400px; /* Adjust as needed */
-  border: 2px dashed var(--text-color);
-  border-radius: 10px;
-  margin-top: 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  color: var(--text-color);
-  opacity: 0.8;
-  overflow: hidden;
 }
 
 /* Wireless Networking Explanation Styles */
