@@ -21,3 +21,17 @@ button {
   opacity: 1;
   transform: translateY(0);
 }
+.arrow {
+  animation: slideArrow 2s infinite;
+}
+@keyframes slideArrow {
+  0% {opacity: 0; transform: translateX(-10px) rotate(-45deg);}
+  50% {opacity: 1; transform: translateX(0) rotate(-45deg);}
+  100% {opacity: 0; transform: translateX(10px) rotate(-45deg);}
+}
+.osi-layer:hover,
+.osi-layer:focus {
+  transform: scale(1.05);
+  background-color: #e0e7ff;
+}
+
