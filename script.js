@@ -133,7 +133,7 @@ function showScore() {
   nextBtn.style.display = 'none';
   restartBtn.style.display = 'inline-block';
   scoreEl.textContent = `You got ${score} out of ${quizData.length} questions correct!`;
-  
+
   // Update progress bar to 100%
   document.getElementById('progress').style.width = '100%';
 }
@@ -238,7 +238,7 @@ const themeToggle = document.querySelector('.theme-toggle');
 const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
 
 // Check for saved theme preference or use system preference
-const currentTheme = localStorage.getItem('theme') || 
+const currentTheme = localStorage.getItem('theme') ||
   (prefersDarkScheme.matches ? 'dark' : 'light');
 
 if (currentTheme === 'dark') {
@@ -471,7 +471,7 @@ function createConfetti(element) {
     confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
     confetti.style.animationDelay = `${Math.random() * 0.5}s`;
     element.appendChild(confetti);
-    
+
     // Remove confetti after animation
     setTimeout(() => confetti.remove(), 1000);
   }
@@ -485,7 +485,7 @@ function createSparkles(element) {
     sparkle.style.top = `${Math.random() * 100}%`;
     sparkle.style.animationDelay = `${Math.random() * 0.5}s`;
     element.appendChild(sparkle);
-    
+
     // Remove sparkle after animation
     setTimeout(() => sparkle.remove(), 1000);
   }
@@ -493,16 +493,16 @@ function createSparkles(element) {
 
 function showPopQuiz() {
   if (popQuizActive) return;
-  
+
   currentPopQuestionIndex = Math.floor(Math.random() * popQuizData.length);
   const question = popQuizData[currentPopQuestionIndex];
-  
+
   popQuestion.textContent = question.question;
   popAnswers.innerHTML = '';
   popExplanation.textContent = '';
   popExplanation.classList.remove('visible');
   popNextBtn.style.display = 'none';
-  
+
   if (question.type === 'multiple-choice' || question.type === 'true-false') {
     question.answers.forEach(answer => {
       const btn = document.createElement('button');
@@ -513,32 +513,32 @@ function showPopQuiz() {
   } else if (question.type === 'matching') {
     const matchingContainer = document.createElement('div');
     matchingContainer.className = 'matching-container';
-    
+
     question.pairs.forEach(pair => {
       const pairContainer = document.createElement('div');
       pairContainer.className = 'matching-pair';
-      
+
       const leftSelect = document.createElement('select');
       const rightSelect = document.createElement('select');
-      
+
       // Add options
       question.pairs.forEach(p => {
         const leftOption = document.createElement('option');
         leftOption.value = p.left;
         leftOption.textContent = p.left;
         leftSelect.appendChild(leftOption);
-        
+
         const rightOption = document.createElement('option');
         rightOption.value = p.right;
         rightOption.textContent = p.right;
         rightSelect.appendChild(rightOption);
       });
-      
+
       pairContainer.appendChild(leftSelect);
       pairContainer.appendChild(rightSelect);
       matchingContainer.appendChild(pairContainer);
     });
-    
+
     popAnswers.appendChild(matchingContainer);
     const checkButton = document.createElement('button');
     checkButton.textContent = 'Check Answers';
@@ -547,7 +547,7 @@ function showPopQuiz() {
   } else if (question.type === 'fill-blank') {
     const inputContainer = document.createElement('div');
     inputContainer.className = 'fill-blank-container';
-    
+
     const questionParts = question.question.split('_');
     questionParts.forEach((part, index) => {
       inputContainer.appendChild(document.createTextNode(part));
@@ -558,14 +558,14 @@ function showPopQuiz() {
         inputContainer.appendChild(input);
       }
     });
-    
+
     popAnswers.appendChild(inputContainer);
     const checkButton = document.createElement('button');
     checkButton.textContent = 'Check Answer';
     checkButton.onclick = () => checkFillBlankAnswers(question);
     popAnswers.appendChild(checkButton);
   }
-  
+
   modal.classList.add('visible');
   modal.setAttribute('aria-hidden', 'false');
   popQuizActive = true;
@@ -575,12 +575,12 @@ function showPopQuiz() {
 function checkMatchingAnswers(question) {
   const pairs = popAnswers.querySelectorAll('.matching-pair');
   let allCorrect = true;
-  
+
   pairs.forEach((pair, index) => {
     const leftSelect = pair.querySelector('select:first-child');
     const rightSelect = pair.querySelector('select:last-child');
     const correctPair = question.pairs[index];
-    
+
     if (leftSelect.value === correctPair.left && rightSelect.value === correctPair.right) {
       pair.classList.add('correct');
       pair.classList.remove('incorrect');
@@ -591,12 +591,12 @@ function checkMatchingAnswers(question) {
       allCorrect = false;
     }
   });
-  
+
   if (allCorrect) {
     popQuizScore++;
     createConfetti(popAnswers);
   }
-  
+
   popExplanation.textContent = question.explanation;
   popExplanation.classList.add('visible');
   popNextBtn.style.display = 'inline-block';
@@ -605,7 +605,7 @@ function checkMatchingAnswers(question) {
 function checkFillBlankAnswers(question) {
   const inputs = popAnswers.querySelectorAll('.fill-blank-input');
   let allCorrect = true;
-  
+
   inputs.forEach((input, index) => {
     if (input.value.toLowerCase() === question.answers[index].text.toLowerCase()) {
       input.classList.add('correct');
@@ -617,12 +617,12 @@ function checkFillBlankAnswers(question) {
       allCorrect = false;
     }
   });
-  
+
   if (allCorrect) {
     popQuizScore++;
     createConfetti(popAnswers);
   }
-  
+
   popExplanation.textContent = question.explanation;
   popExplanation.classList.add('visible');
   popNextBtn.style.display = 'inline-block';
@@ -631,7 +631,7 @@ function checkFillBlankAnswers(question) {
 function selectPopAnswer(button, correct, explanation) {
   const allButtons = popAnswers.querySelectorAll('button');
   allButtons.forEach(btn => btn.disabled = true);
-  
+
   if (correct) {
     button.classList.add('correct');
     popQuizScore++;
@@ -640,7 +640,7 @@ function selectPopAnswer(button, correct, explanation) {
   } else {
     button.classList.add('incorrect');
   }
-  
+
   popExplanation.textContent = explanation;
   popExplanation.classList.add('visible');
   popNextBtn.style.display = 'inline-block';
@@ -650,18 +650,18 @@ function closePopQuiz() {
   modal.classList.remove('visible');
   modal.setAttribute('aria-hidden', 'true');
   popQuizActive = false;
-  
+
   // Show final score if at least one question was answered
   if (totalPopQuestions > 0) {
     const scorePercentage = Math.round((popQuizScore / totalPopQuestions) * 100);
     const scoreMessage = `You answered ${popQuizScore} out of ${totalPopQuestions} questions correctly (${scorePercentage}%)!`;
-    
+
     // Create and show a toast notification
     const toast = document.createElement('div');
     toast.className = 'toast';
     toast.textContent = scoreMessage;
     document.body.appendChild(toast);
-    
+
     setTimeout(() => {
       toast.classList.add('show');
       setTimeout(() => {
@@ -746,34 +746,34 @@ const nextFlashcardBtn = document.getElementById('next-flashcard-btn');
 function createFlashcard(data) {
   const flashcard = document.createElement('div');
   flashcard.className = 'flashcard';
-  
+
   const front = document.createElement('div');
   front.className = 'flashcard-front';
   front.innerHTML = `<h3>${data.front}</h3>`;
-  
+
   const back = document.createElement('div');
   back.className = 'flashcard-back';
   back.innerHTML = `<p>${data.back}</p>`;
-  
+
   flashcard.appendChild(front);
   flashcard.appendChild(back);
-  
+
   // Add click event to flip card
   flashcard.addEventListener('click', () => {
     flashcard.classList.toggle('flipped');
   });
-  
+
   return flashcard;
 }
 
 function showFlashcard(index) {
   // Clear existing flashcards
   flashcardContainer.innerHTML = '';
-  
+
   // Create and show new flashcard
   const flashcard = createFlashcard(flashcardData[index]);
   flashcardContainer.appendChild(flashcard);
-  
+
   // Add entrance animation
   flashcard.style.animation = 'fadeInScale 0.5s ease-out';
 }
@@ -797,3 +797,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 
+// Protocol Explorations
+// JavaScript for interactive protocol explanations will go here
+
+// Network Security Concepts
+// JavaScript for security concepts content will go here
+
+// Wireless Networking Explanation
+// JavaScript for wireless networking content will go here
