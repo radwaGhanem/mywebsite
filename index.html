@@ -81,6 +81,67 @@
       </div>
     </section>
 
+    <section id="osi-visualization" class="section">
+      <h2>Interactive OSI Model Visualization</h2>
+      <div id="visualization-container" aria-label="Interactive OSI Model Visualization">
+        <!-- Visualization will be rendered here by JavaScript -->
+      </div>
+    </section>
+
+    <section id="flashcards-section" class="section">
+      <h2>OSI Model Flashcards</h2>
+      <div id="flashcard-container" aria-label="OSI Model Flashcards">
+        <!-- Flashcards will be loaded here by JavaScript -->
+        <div class="flashcard">
+          <div class="flashcard-front">
+            <h3>Layer Name</h3>
+          </div>
+          <div class="flashcard-back">
+            <p>Description and protocols</p>
+          </div>
+        </div>
+      </div>
+      <button id="next-flashcard-btn" aria-label="Next Flashcard">Next Flashcard</button>
+    </section>
+
+    <section id="progress-tracker" class="section">
+      <h2>Your Learning Progress</h2>
+      <div id="progress-dashboard" aria-label="Learning Progress Dashboard">
+        <!-- Progress tracking elements will be added here by JavaScript -->
+        <div class="progress-item">
+          <h3>Quiz Score: <span id="quiz-progress-score">N/A</span></h3>
+        </div>
+        <!-- More progress items can be added here -->
+      </div>
+    </section>
+
+    <section id="network-simulation" class="section">
+      <h2>Network Simulation Tool</h2>
+      <div id="simulation-area" aria-label="Network Simulation Area">
+        <!-- Simulation interface will be built here by JavaScript -->
+        <p>Simulation interface coming soon!</p>
+      </div>
+      <!-- Simulation controls can be added here -->
+    </section>
+
+    <section id="user-profile" class="section">
+      <h2>Your Profile</h2>
+      <div id="profile-dashboard" aria-label="User Profile Dashboard">
+        <!-- User profile information and settings will be added here by JavaScript -->
+        <p>User profile features coming soon!</p>
+      </div>
+      <!-- Profile controls/settings can be added here -->
+    </section>
+
+    <section id="community-features" class="section">
+      <h2>Community Discussions</h2>
+      <div id="discussion-area" aria-label="Community Discussion Area">
+        <!-- Discussion elements will be added here by JavaScript -->
+        <p>Community features coming soon!</p>
+      </div>
+      <!-- Forms for adding comments/posts can be added here -->
+    </section>
+
     <div class="arrow-container" aria-hidden="true">
       <span class="arrow"></span>
       <span class="arrow"></span>
@@ -95,7 +156,10 @@
           <!-- Buttons inserted here dynamically -->
         </div>
         <div id="explanation" class="explanation"></div>
-        <button id="next-btn" disabled aria-disabled="true" aria-label="Next question">Next</button>
+        <div class="quiz-buttons">
+          <button id="next-btn" disabled aria-disabled="true" aria-label="Next question">Next</button>
+          <button id="restart-btn" style="display: none;" aria-label="Restart quiz">Restart Quiz</button>
+        </div>
         <div id="progress-bar" aria-label="Quiz progress">
           <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
         </div>
@@ -107,6 +171,25 @@
   <footer>
     &copy; 2025 OSI Model Education. All rights reserved.
   </footer>
+
+  <!-- Pop Quiz Modal -->
+  <div id="pop-quiz-modal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Quick Quiz! 🎯</h3>
+        <button class="close-modal" aria-label="Close pop quiz">×</button>
+      </div>
+      <div class="modal-body">
+        <p id="pop-question"></p>
+        <div id="pop-answers"></div>
+        <div id="pop-explanation" class="explanation"></div>
+        <div class="pop-quiz-buttons">
+          <button id="pop-next" class="primary-btn">Next Question</button>
+          <button id="pop-skip" class="secondary-btn">Skip</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
