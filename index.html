@@ -2,13 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Radwa's Web Server</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>OSI Model Explained</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8fafc;
+      color: #1a202c;
+      line-height: 1.6;
+    }
+
+    header {
+      background: linear-gradient(to right, #2563eb, #1d4ed8);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    header h1 {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    header p {
+      font-size: 1.2rem;
+    }
+
+    main {
+      padding: 3rem 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    }
+
+    .section h2 {
+      color: #1e40af;
+      margin-bottom: 1rem;
+    }
+
+    .osi-layer {
+      padding: 1rem;
+      border-left: 5px solid #1e3a8a;
+      margin-bottom: 1rem;
+      background-color: #f1f5f9;
+      border-radius: 6px;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background-color: #e5e7eb;
+      font-size: 0.9rem;
+      color: #4b5563;
+    }
+
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      main {
+        padding: 1.5rem;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>Hello, World!</h1>
-  <p>This site is hosted using Apache and XAMPP.</p>
-  <button onclick="showMessage()">Click me</button>
-  <script src="script.js"></script>
+
+  <header>
+    <h1>Learn the OSI Model</h1>
+    <p>A Deep Dive into Network Layers</p>
+  </header>
+
+  <main>
+    <div class="section">
+      <h2>🌐 What is the OSI Model?</h2>
+      <p>
+        The OSI (Open Systems Interconnection) Model is a conceptual framework used to understand and implement interoperable network protocols. It is divided into 7 layers, each with specific functions.
+      </p>
+    </div>
+
+    <div class="section">
+      <h2>🧱 The 7 Layers of the OSI Model</h2>
+
+      <div class="osi-layer">
+        <strong>7. Application Layer:</strong> Interfaces directly with user applications (e.g., browsers, email).
+      </div>
+      <div class="osi-layer">
+        <strong>6. Presentation Layer:</strong> Translates data formats (e.g., encryption, compression).
+      </div>
+      <div class="osi-layer">
+        <strong>5. Session Layer:</strong> Manages sessions between devices (start/end communication).
+      </div>
+      <div class="osi-layer">
+        <strong>4. Transport Layer:</strong> Ensures reliable transmission (TCP/UDP protocols).
+      </div>
+      <div class="osi-layer">
+        <strong>3. Network Layer:</strong> Handles IP addressing and routing (e.g., IP, routers).
+      </div>
+      <div class="osi-layer">
+        <strong>2. Data Link Layer:</strong> Responsible for MAC addressing and frame transmission.
+      </div>
+      <div class="osi-layer">
+        <strong>1. Physical Layer:</strong> Transmits raw bits over physical media (cables, switches).
+      </div>
+    </div>
+
+    <div class="section">
+      <h2>📚 Why It Matters</h2>
+      <p>
+        Understanding the OSI Model is crucial for network engineers and developers. It helps troubleshoot problems, design networks, and build protocols that communicate smoothly.
+      </p>
+    </div>
+  </main>
+
+  <footer>
+    Made by Radwa Ghanem | Networking Education Project
+  </footer>
+
 </body>
 </html>
