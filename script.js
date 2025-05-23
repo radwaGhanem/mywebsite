@@ -68,14 +68,7 @@ const answersEl = document.getElementById('answers');
 const nextBtn = document.getElementById('next-btn');
 const scoreEl = document.getElementById('score');
 const explanationEl = document.getElementById('explanation');
-
-// Create and add restart button dynamically (hidden initially)
-const restartBtn = document.createElement('button');
-restartBtn.textContent = 'Restart Quiz';
-restartBtn.id = 'restart-btn';
-restartBtn.style.display = 'none';
-restartBtn.addEventListener('click', restartQuiz);
-nextBtn.parentNode.appendChild(restartBtn);
+const restartBtn = document.getElementById('restart-btn');
 
 function loadQuestion() {
   nextBtn.disabled = true;
@@ -155,6 +148,9 @@ function restartQuiz() {
 
 // Add click event listener for next button
 nextBtn.addEventListener('click', nextQuestion);
+
+// Add click event listener for restart button
+restartBtn.addEventListener('click', restartQuiz);
 
 // Load first question initially
 loadQuestion();
@@ -374,5 +370,339 @@ document.addEventListener('click', (e) => {
 searchInput.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     searchResults.classList.remove('visible');
+  }
+});
+
+// Pop Quiz functionality
+const popQuizData = [
+  // Multiple Choice Questions
+  {
+    type: 'multiple-choice',
+    question: "Which layer is responsible for end-to-end communication?",
+    answers: [
+      { text: "Transport Layer", correct: true, explanation: "The Transport layer ensures reliable end-to-end communication between applications." },
+      { text: "Network Layer", correct: false, explanation: "The Network layer handles routing and logical addressing." },
+      { text: "Session Layer", correct: false, explanation: "The Session layer manages sessions between applications." },
+      { text: "Application Layer", correct: false, explanation: "The Application layer provides services to end-user applications." }
+    ]
+  },
+  {
+    type: 'multiple-choice',
+    question: "What is the main purpose of the Presentation Layer?",
+    answers: [
+      { text: "Data format translation and encryption", correct: true, explanation: "The Presentation layer handles data format translation, encryption, and compression." },
+      { text: "Physical transmission of data", correct: false, explanation: "Physical transmission is handled by the Physical layer." },
+      { text: "Routing packets", correct: false, explanation: "Routing is handled by the Network layer." },
+      { text: "Error detection", correct: false, explanation: "Error detection is primarily handled by the Data Link layer." }
+    ]
+  },
+  {
+    type: 'multiple-choice',
+    question: "Which device operates at the Physical Layer?",
+    answers: [
+      { text: "Hub", correct: true, explanation: "Hubs operate at the Physical layer, simply repeating electrical signals." },
+      { text: "Switch", correct: false, explanation: "Switches operate at the Data Link layer." },
+      { text: "Router", correct: false, explanation: "Routers operate at the Network layer." },
+      { text: "Firewall", correct: false, explanation: "Firewalls typically operate at multiple layers, but not primarily at the Physical layer." }
+    ]
+  },
+  // True/False Questions
+  {
+    type: 'true-false',
+    question: "The OSI Model was developed by the International Organization for Standardization (ISO).",
+    answers: [
+      { text: "True", correct: true, explanation: "The OSI Model was indeed developed by ISO to standardize network communications." },
+      { text: "False", correct: false, explanation: "The OSI Model was developed by ISO, not by any other organization." }
+    ]
+  },
+  {
+    type: 'true-false',
+    question: "TCP/IP protocol suite follows the OSI Model exactly.",
+    answers: [
+      { text: "True", correct: false, explanation: "TCP/IP combines some OSI layers and has a different structure." },
+      { text: "False", correct: true, explanation: "TCP/IP has a different structure, combining some OSI layers and having its own unique architecture." }
+    ]
+  },
+  // Matching Questions
+  {
+    type: 'matching',
+    question: "Match the protocols with their correct OSI layers:",
+    pairs: [
+      { left: "HTTP", right: "Application Layer", correct: true },
+      { left: "TCP", right: "Transport Layer", correct: true },
+      { left: "IP", right: "Network Layer", correct: true },
+      { left: "Ethernet", right: "Data Link Layer", correct: true }
+    ],
+    explanation: "Each protocol operates at its specific layer in the OSI Model, with HTTP at the top (Application) and Ethernet near the bottom (Data Link)."
+  },
+  // Fill in the Blank
+  {
+    type: 'fill-blank',
+    question: "The OSI Model has _ layers, with the _ layer being the highest and the _ layer being the lowest.",
+    answers: [
+      { text: "7", correct: true },
+      { text: "Application", correct: true },
+      { text: "Physical", correct: true }
+    ],
+    explanation: "The OSI Model consists of 7 layers, starting with the Application layer (Layer 7) at the top and ending with the Physical layer (Layer 1) at the bottom."
+  }
+];
+
+let popQuizScore = 0;
+let totalPopQuestions = 0;
+
+const modal = document.getElementById('pop-quiz-modal');
+const popQuestion = document.getElementById('pop-question');
+const popAnswers = document.getElementById('pop-answers');
+const popExplanation = document.getElementById('pop-explanation');
+const popNextBtn = document.getElementById('pop-next');
+const popSkipBtn = document.getElementById('pop-skip');
+const closeModalBtn = document.querySelector('.close-modal');
+
+let currentPopQuestionIndex = 0;
+let popQuizActive = false;
+
+function createConfetti(element) {
+  const colors = ['#2563eb', '#1d4ed8', '#3b82f6', '#60a5fa', '#93c5fd'];
+  for (let i = 0; i < 20; i++) {
+    const confetti = document.createElement('div');
+    confetti.className = 'confetti';
+    confetti.style.left = `${Math.random() * 100}%`;
+    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+    confetti.style.animationDelay = `${Math.random() * 0.5}s`;
+    element.appendChild(confetti);
+    
+    // Remove confetti after animation
+    setTimeout(() => confetti.remove(), 1000);
+  }
+}
+
+function createSparkles(element) {
+  for (let i = 0; i < 8; i++) {
+    const sparkle = document.createElement('div');
+    sparkle.className = 'sparkle';
+    sparkle.style.left = `${Math.random() * 100}%`;
+    sparkle.style.top = `${Math.random() * 100}%`;
+    sparkle.style.animationDelay = `${Math.random() * 0.5}s`;
+    element.appendChild(sparkle);
+    
+    // Remove sparkle after animation
+    setTimeout(() => sparkle.remove(), 1000);
+  }
+}
+
+function showPopQuiz() {
+  if (popQuizActive) return;
+  
+  currentPopQuestionIndex = Math.floor(Math.random() * popQuizData.length);
+  const question = popQuizData[currentPopQuestionIndex];
+  
+  popQuestion.textContent = question.question;
+  popAnswers.innerHTML = '';
+  popExplanation.textContent = '';
+  popExplanation.classList.remove('visible');
+  popNextBtn.style.display = 'none';
+  
+  if (question.type === 'multiple-choice' || question.type === 'true-false') {
+    question.answers.forEach(answer => {
+      const btn = document.createElement('button');
+      btn.textContent = answer.text;
+      btn.onclick = () => selectPopAnswer(btn, answer.correct, answer.explanation);
+      popAnswers.appendChild(btn);
+    });
+  } else if (question.type === 'matching') {
+    const matchingContainer = document.createElement('div');
+    matchingContainer.className = 'matching-container';
+    
+    question.pairs.forEach(pair => {
+      const pairContainer = document.createElement('div');
+      pairContainer.className = 'matching-pair';
+      
+      const leftSelect = document.createElement('select');
+      const rightSelect = document.createElement('select');
+      
+      // Add options
+      question.pairs.forEach(p => {
+        const leftOption = document.createElement('option');
+        leftOption.value = p.left;
+        leftOption.textContent = p.left;
+        leftSelect.appendChild(leftOption);
+        
+        const rightOption = document.createElement('option');
+        rightOption.value = p.right;
+        rightOption.textContent = p.right;
+        rightSelect.appendChild(rightOption);
+      });
+      
+      pairContainer.appendChild(leftSelect);
+      pairContainer.appendChild(rightSelect);
+      matchingContainer.appendChild(pairContainer);
+    });
+    
+    popAnswers.appendChild(matchingContainer);
+    const checkButton = document.createElement('button');
+    checkButton.textContent = 'Check Answers';
+    checkButton.onclick = () => checkMatchingAnswers(question);
+    popAnswers.appendChild(checkButton);
+  } else if (question.type === 'fill-blank') {
+    const inputContainer = document.createElement('div');
+    inputContainer.className = 'fill-blank-container';
+    
+    const questionParts = question.question.split('_');
+    questionParts.forEach((part, index) => {
+      inputContainer.appendChild(document.createTextNode(part));
+      if (index < questionParts.length - 1) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'fill-blank-input';
+        inputContainer.appendChild(input);
+      }
+    });
+    
+    popAnswers.appendChild(inputContainer);
+    const checkButton = document.createElement('button');
+    checkButton.textContent = 'Check Answer';
+    checkButton.onclick = () => checkFillBlankAnswers(question);
+    popAnswers.appendChild(checkButton);
+  }
+  
+  modal.classList.add('visible');
+  modal.setAttribute('aria-hidden', 'false');
+  popQuizActive = true;
+  totalPopQuestions++;
+}
+
+function checkMatchingAnswers(question) {
+  const pairs = popAnswers.querySelectorAll('.matching-pair');
+  let allCorrect = true;
+  
+  pairs.forEach((pair, index) => {
+    const leftSelect = pair.querySelector('select:first-child');
+    const rightSelect = pair.querySelector('select:last-child');
+    const correctPair = question.pairs[index];
+    
+    if (leftSelect.value === correctPair.left && rightSelect.value === correctPair.right) {
+      pair.classList.add('correct');
+      pair.classList.remove('incorrect');
+      createSparkles(pair);
+    } else {
+      pair.classList.add('incorrect');
+      pair.classList.remove('correct');
+      allCorrect = false;
+    }
+  });
+  
+  if (allCorrect) {
+    popQuizScore++;
+    createConfetti(popAnswers);
+  }
+  
+  popExplanation.textContent = question.explanation;
+  popExplanation.classList.add('visible');
+  popNextBtn.style.display = 'inline-block';
+}
+
+function checkFillBlankAnswers(question) {
+  const inputs = popAnswers.querySelectorAll('.fill-blank-input');
+  let allCorrect = true;
+  
+  inputs.forEach((input, index) => {
+    if (input.value.toLowerCase() === question.answers[index].text.toLowerCase()) {
+      input.classList.add('correct');
+      input.classList.remove('incorrect');
+      createSparkles(input);
+    } else {
+      input.classList.add('incorrect');
+      input.classList.remove('correct');
+      allCorrect = false;
+    }
+  });
+  
+  if (allCorrect) {
+    popQuizScore++;
+    createConfetti(popAnswers);
+  }
+  
+  popExplanation.textContent = question.explanation;
+  popExplanation.classList.add('visible');
+  popNextBtn.style.display = 'inline-block';
+}
+
+function selectPopAnswer(button, correct, explanation) {
+  const allButtons = popAnswers.querySelectorAll('button');
+  allButtons.forEach(btn => btn.disabled = true);
+  
+  if (correct) {
+    button.classList.add('correct');
+    popQuizScore++;
+    createConfetti(button);
+    createSparkles(button);
+  } else {
+    button.classList.add('incorrect');
+  }
+  
+  popExplanation.textContent = explanation;
+  popExplanation.classList.add('visible');
+  popNextBtn.style.display = 'inline-block';
+}
+
+function closePopQuiz() {
+  modal.classList.remove('visible');
+  modal.setAttribute('aria-hidden', 'true');
+  popQuizActive = false;
+  
+  // Show final score if at least one question was answered
+  if (totalPopQuestions > 0) {
+    const scorePercentage = Math.round((popQuizScore / totalPopQuestions) * 100);
+    const scoreMessage = `You answered ${popQuizScore} out of ${totalPopQuestions} questions correctly (${scorePercentage}%)!`;
+    
+    // Create and show a toast notification
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = scoreMessage;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }, 100);
+  }
+}
+
+// Event listeners
+closeModalBtn.addEventListener('click', closePopQuiz);
+popNextBtn.addEventListener('click', nextPopQuestion);
+popSkipBtn.addEventListener('click', closePopQuiz);
+
+// Show pop quiz randomly while scrolling
+let lastScrollTime = Date.now();
+let scrollCount = 0;
+
+window.addEventListener('scroll', () => {
+  const currentTime = Date.now();
+  if (currentTime - lastScrollTime > 1000) { // Check every second
+    scrollCount++;
+    if (scrollCount >= 3 && !popQuizActive) { // Show quiz after 3 scroll events
+      showPopQuiz();
+      scrollCount = 0;
+    }
+    lastScrollTime = currentTime;
+  }
+});
+
+// Close modal when clicking outside
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) {
+    closePopQuiz();
+  }
+});
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && popQuizActive) {
+    closePopQuiz();
   }
 });
