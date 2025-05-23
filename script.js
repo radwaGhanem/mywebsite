@@ -226,3 +226,55 @@ document.querySelectorAll('.osi-layer').forEach(layer => {
     }
   });
 });
+
+// Theme toggling
+const themeToggle = document.querySelector('.theme-toggle');
+const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
+
+// Check for saved theme preference or use system preference
+const currentTheme = localStorage.getItem('theme') || 
+  (prefersDarkScheme.matches ? 'dark' : 'light');
+
+if (currentTheme === 'dark') {
+  document.body.setAttribute('data-theme', 'dark');
+}
+
+themeToggle.addEventListener('click', () => {
+  const newTheme = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.body.setAttribute('data-theme', newTheme);
+  localStorage.setItem('theme', newTheme);
+});
+
+// Data packet animation
+const packet = document.querySelector('.packet');
+const layers = document.querySelectorAll('.osi-layer');
+
+function animatePacket() {
+  packet.style.animation = 'none';
+  packet.offsetHeight; // Trigger reflow
+  packet.style.animation = 'movePacket 7s linear infinite';
+}
+
+// Start animation when section is visible
+const packetObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      animatePacket();
+    }
+  });
+}, { threshold: 0.5 });
+
+packetObserver.observe(document.querySelector('.osi-diagram'));
+
+// Layer interaction enhancement
+layers.forEach(layer => {
+  layer.addEventListener('mouseenter', () => {
+    const layerNumber = layer.getAttribute('data-layer');
+    packet.style.animationPlayState = 'paused';
+    packet.style.top = `${(layerNumber - 1) * 100}px`;
+  });
+
+  layer.addEventListener('mouseleave', () => {
+    packet.style.animationPlayState = 'running';
+  });
+});
