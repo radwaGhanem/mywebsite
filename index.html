@@ -13,6 +13,10 @@
   <header>
     <h1>Learn the OSI Model</h1>
     <p>A Deep Dive into Network Layers</p>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Search layers, protocols, or concepts..." aria-label="Search content">
+      <div id="search-results" class="search-results" aria-live="polite"></div>
+    </div>
   </header>
 
   <main>
@@ -90,6 +94,7 @@
         <div id="answers">
           <!-- Buttons inserted here dynamically -->
         </div>
+        <div id="explanation" class="explanation"></div>
         <button id="next-btn" disabled aria-disabled="true" aria-label="Next question">Next</button>
         <div id="progress-bar" aria-label="Quiz progress">
           <div id="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
