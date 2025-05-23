@@ -799,27 +799,30 @@ document.addEventListener('keydown', (e) => {
 // Interactive OSI Model Visualization
 const visualizationContainer = document.getElementById('visualization-container');
 const osiLayers = [
-  { name: 'Application', color: '#FF6B6B', protocols: ['HTTP', 'FTP', 'SMTP', 'DNS'] },
-  { name: 'Presentation', color: '#4ECDC4', protocols: ['SSL/TLS', 'JPEG', 'GIF'] },
-  { name: 'Session', color: '#45B7D1', protocols: ['NetBIOS', 'RPC'] },
-  { name: 'Transport', color: '#96CEB4', protocols: ['TCP', 'UDP'] },
-  { name: 'Network', color: '#FFEEAD', protocols: ['IP', 'ICMP', 'OSPF'] },
-  { name: 'Data Link', color: '#D4A5A5', protocols: ['Ethernet', 'PPP', 'MAC'] },
-  { name: 'Physical', color: '#9B59B6', protocols: ['Cables', 'Hubs', 'Repeaters'] }
+  { name: 'Application', color: '#FF6B6B', protocols: ['HTTP', 'FTP', 'SMTP', 'DNS'], userDescription: 'User enters https://somesite.com', serverDescription: 'The application processes the user request and prepares a response to go back out over the wire' },
+  { name: 'Presentation', color: '#4ECDC4', protocols: ['SSL/TLS', 'JPEG', 'GIF'], userDescription: 'Application data is decoded to machine language', serverDescription: 'The server application re-encodes the bits to content the application understands' },
+  { name: 'Session', color: '#45B7D1', protocols: ['NetBIOS', 'RPC'], userDescription: 'Start a TLS session over TCP', serverDescription: 'Initialize a TLS session with the client. All data will be encrypted' },
+  { name: 'Transport', color: '#96CEB4', protocols: ['TCP', 'UDP'], userDescription: 'Destination port is TCP/443. The system network stack assigns a random ephemeral port as the source port', serverDescription: 'The TCP/IP stack receives a SYN packet on TCP/443' },
+  { name: 'Network', color: '#FFEEAD', protocols: ['IP', 'ICMP', 'OSPF'], userDescription: 'The packet is stamped with the destination address of the server', serverDescription: 'The destination IP address is stamped with the server\'s address' },
+  { name: 'Data Link', color: '#D4A5A5', protocols: ['Ethernet', 'PPP', 'MAC'], userDescription: 'The destination IP address is not in the LAN. The packet is stamped with the MAC of the default gateway.', serverDescription: 'Packet comes in on the WAN interface from the ISP. Destination MAC is correct.' },
+  { name: 'Physical', color: '#9B59B6', protocols: ['Cables', 'Hubs', 'Repeaters'], userDescription: 'Transmit electrical pulses over the wire', serverDescription: 'Server receives the electrical pulses - or bits' }
 ];
 
 function createOSIVisualization() {
   const container = document.createElement('div');
-  container.className = 'osi-visualization';
+  container.className = 'osi-visualization-layers';
   
   osiLayers.forEach((layer, index) => {
     const layerElement = document.createElement('div');
     layerElement.className = 'visualization-layer';
     layerElement.style.backgroundColor = layer.color;
-    layerElement.style.transform = `translateY(${index * 60}px)`;
+    // Vertical positioning is now handled by CSS margin-bottom and flex direction
+    layerElement.setAttribute('tabindex', '0');
+    layerElement.setAttribute('role', 'button');
+    layerElement.setAttribute('aria-expanded', 'false');
     
-    const layerContent = document.createElement('div');
-    layerContent.className = 'layer-content';
+    const layerHeader = document.createElement('div');
+    layerHeader.className = 'layer-header';
     
     const layerName = document.createElement('h3');
     layerName.textContent = `${layer.name} Layer (${7 - index})`;
@@ -833,19 +836,40 @@ function createOSIVisualization() {
       protocolsList.appendChild(protocolElement);
     });
     
-    layerContent.appendChild(layerName);
-    layerContent.appendChild(protocolsList);
-    layerElement.appendChild(layerContent);
+    layerHeader.appendChild(layerName);
+    layerHeader.appendChild(protocolsList);
+    layerElement.appendChild(layerHeader);
     
-    // Add hover effect
-    layerElement.addEventListener('mouseenter', () => {
-      layerElement.style.transform = `translateY(${index * 60}px) scale(1.05)`;
-      layerElement.style.zIndex = '1';
+    // Add description area (hidden by default)
+    const descriptionArea = document.createElement('div');
+    descriptionArea.className = 'layer-description';
+    descriptionArea.setAttribute('aria-hidden', 'true');
+    
+    const userDesc = document.createElement('p');
+    userDesc.innerHTML = `<strong>User Request:</strong> ${layer.userDescription}`;
+    
+    const serverDesc = document.createElement('p');
+    serverDesc.innerHTML = `<strong>Server Response:</strong> ${layer.serverDescription}`;
+    
+    descriptionArea.appendChild(userDesc);
+    descriptionArea.appendChild(serverDesc);
+    layerElement.appendChild(descriptionArea);
+    
+    // Add click event to toggle description
+    layerElement.addEventListener('click', () => {
+      const isExpanded = layerElement.classList.toggle('expanded');
+      layerElement.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+      // CSS handles the display of descriptionArea based on the expanded class
     });
     
-    layerElement.addEventListener('mouseleave', () => {
-      layerElement.style.transform = `translateY(${index * 60}px)`;
-      layerElement.style.zIndex = '0';
+    // Add keyboard event for accessibility
+    layerElement.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const isExpanded = layerElement.classList.toggle('expanded');
+        layerElement.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        // CSS handles the display of descriptionArea based on the expanded class
+      }
     });
     
     container.appendChild(layerElement);
