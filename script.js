@@ -816,3 +816,160 @@ document.addEventListener('keydown', (e) => {
 //Progress tracking
 //Dynamic content updates
 //JavaScript is like the muscles that make it move and function
+
+// Mock data for demonstration
+const mockUsers = [
+    { id: 1, name: 'John Doe', email: 'john@example.com' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com' }
+];
+
+const mockData = [
+    { id: 1, title: 'Data Entry 1', content: 'Sample content 1' },
+    { id: 2, title: 'Data Entry 2', content: 'Sample content 2' }
+];
+
+// Function to show response in a modal
+function showResponse(title, data) {
+    const modal = document.createElement('div');
+    modal.className = 'response-modal';
+    
+    const content = document.createElement('div');
+    content.className = 'response-content';
+    
+    const header = document.createElement('div');
+    header.className = 'response-header';
+    header.innerHTML = `
+        <h3>${title}</h3>
+        <button class="close-response">×</button>
+    `;
+    
+    const body = document.createElement('div');
+    body.className = 'response-body';
+    body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
+    
+    content.appendChild(header);
+    content.appendChild(body);
+    modal.appendChild(content);
+    document.body.appendChild(modal);
+    
+    // Add animation class after a small delay
+    setTimeout(() => modal.classList.add('visible'), 10);
+    
+    // Close modal functionality
+    const closeBtn = modal.querySelector('.close-response');
+    closeBtn.onclick = () => {
+        modal.classList.remove('visible');
+        setTimeout(() => modal.remove(), 300);
+    };
+}
+
+// Function to handle GET requests
+function handleGet(endpoint) {
+    let response;
+    switch(endpoint) {
+        case '/api/users':
+            response = mockUsers;
+            break;
+        case '/api/users/{id}':
+            response = mockUsers[0]; // Simulating getting first user
+            break;
+        case '/api/data':
+            response = mockData;
+            break;
+        default:
+            response = { error: 'Endpoint not found' };
+    }
+    showResponse(`GET ${endpoint}`, response);
+}
+
+// Function to handle POST requests
+function handlePost(endpoint) {
+    let response;
+    switch(endpoint) {
+        case '/api/users':
+            response = { message: 'User created successfully', id: 3 };
+            break;
+        case '/api/auth/login':
+            response = { token: 'mock-jwt-token', user: mockUsers[0] };
+            break;
+        case '/api/auth/register':
+            response = { message: 'Registration successful', user: mockUsers[0] };
+            break;
+        case '/api/auth/logout':
+            response = { message: 'Logged out successfully' };
+            break;
+        case '/api/data':
+            response = { message: 'Data created successfully', id: 3 };
+            break;
+        default:
+            response = { error: 'Endpoint not found' };
+    }
+    showResponse(`POST ${endpoint}`, response);
+}
+
+// Function to handle PUT requests
+function handlePut(endpoint) {
+    let response;
+    switch(endpoint) {
+        case '/api/users/{id}':
+            response = { message: 'User updated successfully', id: 1 };
+            break;
+        case '/api/data/{id}':
+            response = { message: 'Data updated successfully', id: 1 };
+            break;
+        default:
+            response = { error: 'Endpoint not found' };
+    }
+    showResponse(`PUT ${endpoint}`, response);
+}
+
+// Function to handle DELETE requests
+function handleDelete(endpoint) {
+    let response;
+    switch(endpoint) {
+        case '/api/users/{id}':
+            response = { message: 'User deleted successfully' };
+            break;
+        case '/api/data/{id}':
+            response = { message: 'Data deleted successfully' };
+            break;
+        default:
+            response = { error: 'Endpoint not found' };
+    }
+    showResponse(`DELETE ${endpoint}`, response);
+}
+
+// Add click handlers to all endpoints
+document.addEventListener('DOMContentLoaded', () => {
+    const endpoints = document.querySelectorAll('.http-endpoint');
+    
+    endpoints.forEach(endpoint => {
+        endpoint.addEventListener('click', () => {
+            const method = endpoint.querySelector('.http-method').textContent;
+            const path = endpoint.querySelector('.endpoint-path').textContent;
+            
+            // Add loading state
+            endpoint.classList.add('loading');
+            
+            // Simulate API call delay
+            setTimeout(() => {
+                endpoint.classList.remove('loading');
+                
+                switch(method) {
+                    case 'GET':
+                        handleGet(path);
+                        break;
+                    case 'POST':
+                        handlePost(path);
+                        break;
+                    case 'PUT':
+                        handlePut(path);
+                        break;
+                    case 'DELETE':
+                        handleDelete(path);
+                        break;
+                }
+            }, 500);
+        });
+    });
+});
