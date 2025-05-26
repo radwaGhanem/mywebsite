@@ -156,28 +156,6 @@
       body.setAttribute('data-theme', newTheme);
     }
 
-    // Search functionality
-    const searchInput = document.getElementById('search-input');
-    const endpoints = document.querySelectorAll('.http-endpoint');
-
-    searchInput.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      
-      endpoints.forEach(endpoint => {
-        const path = endpoint.querySelector('.endpoint-path').textContent.toLowerCase();
-        const description = endpoint.querySelector('.endpoint-description').textContent.toLowerCase();
-        const method = endpoint.querySelector('.http-method').textContent.toLowerCase();
-        
-        if (path.includes(searchTerm) || 
-          description.includes(searchTerm) || 
-          method.includes(searchTerm)) {
-          endpoint.style.display = 'flex';
-        } else {
-          endpoint.style.display = 'none';
-        }
-      });
-    });
-
     // Animation on scroll
     const sections = document.querySelectorAll('.section');
     
