@@ -96,10 +96,49 @@
         <span class="endpoint-description">Delete data entry</span>
       </div>
     </section>
+
+    <!-- Network Testing Panel -->
+    <section class="section network-testing">
+      <h2>Network Testing Panel</h2>
+      <div class="network-controls">
+        <div class="request-panel">
+          <h3>Make a Request</h3>
+          <div class="method-selector">
+            <button class="method-btn get active" data-method="GET">GET</button>
+            <button class="method-btn post" data-method="POST">POST</button>
+            <button class="method-btn put" data-method="PUT">PUT</button>
+            <button class="method-btn delete" data-method="DELETE">DELETE</button>
+          </div>
+          <div class="endpoint-input">
+            <input type="text" id="endpoint-url" placeholder="Enter endpoint (e.g., /api/users)" value="/api/users">
+          </div>
+          <div class="request-body">
+            <h4>Request Body (for POST/PUT)</h4>
+            <textarea id="request-body" placeholder='{"name": "John Doe", "email": "john@example.com"}'></textarea>
+          </div>
+          <button id="send-request" class="send-btn">Send Request</button>
+        </div>
+        
+        <div class="response-panel">
+          <h3>Response</h3>
+          <div class="response-info">
+            <span class="status-code">Status: <span id="status-code">-</span></span>
+            <span class="response-time">Time: <span id="response-time">-</span>ms</span>
+          </div>
+          <pre id="response-body">No response yet</pre>
+        </div>
+      </div>
+
+      <div class="network-history">
+        <h3>Request History</h3>
+        <div id="history-list"></div>
+      </div>
+    </section>
   </main>
 
   <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
 
+  <script src="script.js"></script>
   <script>
     // Theme toggle functionality
     function toggleTheme() {
