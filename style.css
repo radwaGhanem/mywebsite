@@ -1235,6 +1235,169 @@ header {
     animation: spin 0.8s linear infinite;
 }
 
+/* Network Testing Panel Styles */
+.network-testing {
+    max-width: 1200px;
+    margin: 2rem auto;
+}
+
+.network-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.request-panel, .response-panel {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.method-selector {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.method-btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+.method-btn.active {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+.method-btn.get { background-color: #61affe; color: white; }
+.method-btn.post { background-color: #49cc90; color: white; }
+.method-btn.put { background-color: #fca130; color: white; }
+.method-btn.delete { background-color: #f93e3e; color: white; }
+
+.endpoint-input {
+    margin-bottom: 1rem;
+}
+
+.endpoint-input input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 2px solid var(--text-color);
+    border-radius: 6px;
+    font-size: 1rem;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+}
+
+.request-body {
+    margin-bottom: 1rem;
+}
+
+.request-body textarea {
+    width: 100%;
+    height: 150px;
+    padding: 0.8rem;
+    border: 2px solid var(--text-color);
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    resize: vertical;
+}
+
+.send-btn {
+    width: 100%;
+    padding: 1rem;
+    background-color: var(--text-color);
+    color: var(--bg-color);
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.response-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-color);
+}
+
+#response-body {
+    background-color: var(--bg-color);
+    padding: 1rem;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-height: 300px;
+    overflow-y: auto;
+    color: var(--text-color);
+}
+
+.network-history {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.history-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    background-color: var(--bg-color);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.history-item:hover {
+    transform: translateX(5px);
+}
+
+.history-method {
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: white;
+}
+
+.history-endpoint {
+    flex-grow: 1;
+    font-family: monospace;
+}
+
+.history-time {
+    font-size: 0.8rem;
+    color: var(--text-color);
+    opacity: 0.7;
+}
+
 /* Handles the visual appearance and styling
 Makes your website look professional and user-friendly
 Controls:
