@@ -805,3 +805,14 @@ document.addEventListener('keydown', (e) => {
 
 // Wireless Networking Explanation
 // JavaScript for wireless networking content will go here
+
+//Adds interactivity and dynamic features
+//Makes your website functional and engaging
+//Implements:
+//Interactive OSI Model diagram
+//Quiz functionality
+//Search feature
+//Theme switching
+//Progress tracking
+//Dynamic content updates
+//JavaScript is like the muscles that make it move and function
