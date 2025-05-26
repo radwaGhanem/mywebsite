@@ -1065,3 +1065,83 @@ header {
   width: 100%;
   /* Styles for wireless content will be added here */
 }
+
+/* HTTP Method Styles */
+.http-method {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  margin: 0.2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.http-method:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.http-method.get {
+  background-color: #61affe;
+  color: #fff;
+  border: 1px solid #4f8fcc;
+}
+
+.http-method.post {
+  background-color: #49cc90;
+  color: #fff;
+  border: 1px solid #3aa76d;
+}
+
+.http-method.put {
+  background-color: #fca130;
+  color: #fff;
+  border: 1px solid #e08e0b;
+}
+
+.http-method.delete {
+  background-color: #f93e3e;
+  color: #fff;
+  border: 1px solid #d32f2f;
+}
+
+.http-endpoint {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  margin: 1rem 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.http-endpoint:hover {
+  transform: translateX(5px);
+}
+
+.endpoint-path {
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: var(--text-color);
+}
+
+.endpoint-description {
+  color: var(--text-color);
+  opacity: 0.8;
+  font-size: 0.9rem;
+}
+
+/* Handles the visual appearance and styling
+Makes your website look professional and user-friendly
+Controls:
+Colors and themes (dark/light mode)
+Layout and positioning
+Animations and transitions
+Responsive design for different screen sizes
+Interactive elements' appearance
+//CSS is like the skin and clothes that make it look good
