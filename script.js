@@ -832,47 +832,11 @@ function updateDataStateDisplay() {
     }
 }
 
-// Call this function on page load to show initial data
-updateDataStateDisplay();
-
-// Function to show response in a modal
-function showResponse(title, data) {
-    const modal = document.createElement('div');
-    modal.className = 'response-modal';
-    
-    const content = document.createElement('div');
-    content.className = 'response-content';
-    
-    const header = document.createElement('div');
-    header.className = 'response-header';
-    header.innerHTML = `
-        <h3>${title}</h3>
-        <button class="close-response">×</button>
-    `;
-    
-    const body = document.createElement('div');
-    body.className = 'response-body';
-    body.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`;
-    
-    content.appendChild(header);
-    content.appendChild(body);
-    modal.appendChild(content);
-    document.body.appendChild(modal);
-    
-    // Add animation class after a small delay
-    setTimeout(() => modal.classList.add('visible'), 10);
-    
-    // Close modal functionality
-    const closeBtn = modal.querySelector('.close-response');
-    closeBtn.onclick = () => {
-        modal.classList.remove('visible');
-        setTimeout(() => modal.remove(), 300);
-    };
-}
-
-// Network Testing Panel Functionality
+// Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
-    const methodButtons = document.querySelectorAll('.method-btn');
+    // Update initial data state display
+    updateDataStateDisplay();
+
     const endpointInput = document.getElementById('endpoint-url');
     const requestBodyInput = document.getElementById('request-body');
     const sendButton = document.getElementById('send-request');
@@ -880,23 +844,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusCodeElement = document.getElementById('status-code');
     const responseTimeElement = document.getElementById('response-time');
     const historyList = document.getElementById('history-list');
+    const methodSelector = document.querySelector('.method-selector');
 
     // Add OPTIONS method button
-    const methodSelector = document.querySelector('.method-selector');
     const optionsButton = document.createElement('button');
     optionsButton.className = 'method-btn options';
     optionsButton.dataset.method = 'OPTIONS';
     optionsButton.textContent = 'OPTIONS';
     methodSelector.appendChild(optionsButton);
 
-    // Method selection
+    // Get all method buttons AFTER adding the OPTIONS button
+    const methodButtons = document.querySelectorAll('.method-btn');
+
+    // Attach click listeners to all method buttons
     methodButtons.forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', function() { // Use a regular function to ensure 'this' is the button
+            console.log('Method button clicked:', this.dataset.method); // Log click
             methodButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
+            this.classList.add('active');
             
             // Show/hide request body based on method
-            const method = button.dataset.method;
+            const method = this.dataset.method;
             requestBodyInput.parentElement.style.display = 
                 (method === 'POST' || method === 'PUT') ? 'block' : 'none';
         });
@@ -904,6 +872,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Send request
     sendButton.addEventListener('click', async () => {
+        console.log('Send Request button clicked'); // Log click
         const method = document.querySelector('.method-btn.active').dataset.method;
         const endpoint = endpointInput.value.trim();
         const body = requestBodyInput.value.trim();
@@ -963,6 +932,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 case 'POST':
                     try {
                         const newData = JSON.parse(body);
+                         // Validate required fields if necessary, for now just update message
                         mockData = {
                             message: newData.message || 'Default message',
                             last_updated: new Date().toISOString(),
@@ -975,7 +945,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             status: "Data replaced successfully",
                             timestamp: new Date().toISOString()
                         };
+                         statusCode = 201; // Created
                     } catch (e) {
+                        console.error("POST Error: ", e); // Log the error
                         responseData = {
                             error: "Invalid JSON data",
                             status: "Error",
@@ -991,12 +963,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                     try {
                         const newData = JSON.parse(body);
-                        if (newData.message) {
-                            mockData = {
-                                message: newData.message,
-                                last_updated: new Date().toISOString(),
-                                exists: true
-                            };
+                        if (newData.message !== undefined) { // Check specifically for message field
+                            mockData.message = newData.message;
+                             mockData.last_updated = new Date().toISOString();
+                            mockData.exists = true; // Ensure it exists after update
                         }
                         responseData = {
                             method: "PUT",
@@ -1005,7 +975,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             status: "Message updated successfully",
                             timestamp: new Date().toISOString()
                         };
+                         statusCode = 200; // OK
                     } catch (e) {
+                        console.error("PUT Error: ", e); // Log the error
                         responseData = {
                             error: "Invalid JSON data",
                             status: "Error",
@@ -1024,6 +996,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         timestamp: new Date().toISOString()
                     };
                     break;
+                
+                default:
+                    responseData = { error: 'Unsupported method', timestamp: new Date().toISOString() };
+                    statusCode = 405; // Method Not Allowed
             }
 
             // Simulate network delay
@@ -1048,6 +1024,7 @@ document.addEventListener('DOMContentLoaded', () => {
             addToHistory(method, endpoint, responseWithHeaders, statusCode);
 
         } catch (error) {
+            console.error("Send Request Error: ", error); // Log the error
             const endTime = Date.now();
             responseData = {
                 error: "Request failed",
@@ -1090,10 +1067,27 @@ document.addEventListener('DOMContentLoaded', () => {
         // Add click handler to replay request
         historyItem.addEventListener('click', () => {
             const methodBtn = document.querySelector(`.method-btn[data-method="${method}"]`);
-            methodBtn.click();
-            endpointInput.value = endpoint;
-            if (method === 'POST' || method === 'PUT') {
-                requestBodyInput.value = JSON.stringify(response, null, 2);
+            if (methodBtn) {
+                 methodBtn.click();
+                 endpointInput.value = endpoint;
+                 if (method === 'POST' || method === 'PUT') {
+                     // Attempt to parse and display the response body for replaying POST/PUT
+                     try {
+                         // We stored the full response object in history, extract data if available
+                         if(response && response.data) {
+                             requestBodyInput.value = JSON.stringify(response.data, null, 2);
+                         } else if (response && response.error) {
+                              // If it was an error response, clear the body or show error
+                             requestBodyInput.value = '{ /* Error response, body may not be relevant */ }';
+                         } else {
+                              // Fallback if response structure is unexpected
+                             requestBodyInput.value = '{ /* Could not load body for replay */ }';
+                         }
+                     } catch (e) {
+                         console.error("Error setting request body for replay: ", e);
+                         requestBodyInput.value = '{ /* Error parsing response data for replay */ }';
+                     }
+                 }
             }
         });
         
