@@ -828,6 +828,21 @@ const mockData = [
     { id: 2, title: 'Data Entry 2', content: 'Sample content 2' }
 ];
 
+// Function to update the displayed data state
+function updateDataStateDisplay() {
+    const dataOutputElement = document.getElementById('current-data-output');
+    if (dataOutputElement) {
+        const combinedData = {
+            users: mockUsers,
+            data: mockData
+        };
+        dataOutputElement.textContent = JSON.stringify(combinedData, null, 4);
+    }
+}
+
+// Call this function on page load to show initial data
+updateDataStateDisplay();
+
 // Function to show response in a modal
 function showResponse(title, data) {
     const modal = document.createElement('div');
@@ -863,113 +878,245 @@ function showResponse(title, data) {
     };
 }
 
-// Function to handle GET requests
-function handleGet(endpoint) {
-    let response;
-    switch(endpoint) {
-        case '/api/users':
-            response = mockUsers;
-            break;
-        case '/api/users/{id}':
-            response = mockUsers[0]; // Simulating getting first user
-            break;
-        case '/api/data':
-            response = mockData;
-            break;
-        default:
-            response = { error: 'Endpoint not found' };
-    }
-    showResponse(`GET ${endpoint}`, response);
-}
-
-// Function to handle POST requests
-function handlePost(endpoint) {
-    let response;
-    switch(endpoint) {
-        case '/api/users':
-            response = { message: 'User created successfully', id: 3 };
-            break;
-        case '/api/auth/login':
-            response = { token: 'mock-jwt-token', user: mockUsers[0] };
-            break;
-        case '/api/auth/register':
-            response = { message: 'Registration successful', user: mockUsers[0] };
-            break;
-        case '/api/auth/logout':
-            response = { message: 'Logged out successfully' };
-            break;
-        case '/api/data':
-            response = { message: 'Data created successfully', id: 3 };
-            break;
-        default:
-            response = { error: 'Endpoint not found' };
-    }
-    showResponse(`POST ${endpoint}`, response);
-}
-
-// Function to handle PUT requests
-function handlePut(endpoint) {
-    let response;
-    switch(endpoint) {
-        case '/api/users/{id}':
-            response = { message: 'User updated successfully', id: 1 };
-            break;
-        case '/api/data/{id}':
-            response = { message: 'Data updated successfully', id: 1 };
-            break;
-        default:
-            response = { error: 'Endpoint not found' };
-    }
-    showResponse(`PUT ${endpoint}`, response);
-}
-
-// Function to handle DELETE requests
-function handleDelete(endpoint) {
-    let response;
-    switch(endpoint) {
-        case '/api/users/{id}':
-            response = { message: 'User deleted successfully' };
-            break;
-        case '/api/data/{id}':
-            response = { message: 'Data deleted successfully' };
-            break;
-        default:
-            response = { error: 'Endpoint not found' };
-    }
-    showResponse(`DELETE ${endpoint}`, response);
-}
-
-// Add click handlers to all endpoints
+// Network Testing Panel Functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const endpoints = document.querySelectorAll('.http-endpoint');
-    
-    endpoints.forEach(endpoint => {
-        endpoint.addEventListener('click', () => {
-            const method = endpoint.querySelector('.http-method').textContent;
-            const path = endpoint.querySelector('.endpoint-path').textContent;
+    const methodButtons = document.querySelectorAll('.method-btn');
+    const endpointInput = document.getElementById('endpoint-url');
+    const requestBodyInput = document.getElementById('request-body');
+    const sendButton = document.getElementById('send-request');
+    const responseBodyElement = document.getElementById('response-body');
+    const statusCodeElement = document.getElementById('status-code');
+    const responseTimeElement = document.getElementById('response-time');
+    const historyList = document.getElementById('history-list');
+
+    // Method selection
+    methodButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            methodButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
             
-            // Add loading state
-            endpoint.classList.add('loading');
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                endpoint.classList.remove('loading');
-                
-                switch(method) {
-                    case 'GET':
-                        handleGet(path);
-                        break;
-                    case 'POST':
-                        handlePost(path);
-                        break;
-                    case 'PUT':
-                        handlePut(path);
-                        break;
-                    case 'DELETE':
-                        handleDelete(path);
-                        break;
-                }
-            }, 500);
+            // Show/hide request body based on method
+            const method = button.dataset.method;
+            requestBodyInput.parentElement.style.display = 
+                (method === 'POST' || method === 'PUT') ? 'block' : 'none';
         });
     });
+
+    // Send request
+    sendButton.addEventListener('click', async () => {
+        const method = document.querySelector('.method-btn.active').dataset.method;
+        const endpoint = endpointInput.value.trim();
+        const body = requestBodyInput.value.trim();
+
+        // Update UI to show loading state
+        sendButton.disabled = true;
+        sendButton.textContent = 'Sending...';
+        responseBodyElement.textContent = 'Loading...';
+        statusCodeElement.textContent = '-';
+        responseTimeElement.textContent = '-';
+
+        const startTime = Date.now();
+
+        try {
+            let responseData;
+            let statusCode = 200;
+
+            // --- Simulate API call and modify mock data ---
+            switch(method) {
+                case 'GET':
+                    if (endpoint === '/api/users') {
+                        responseData = mockUsers;
+                    } else if (endpoint.match(/^\/api\/users\/\d+$/)) {
+                        const userId = parseInt(endpoint.split('/').pop());
+                        const user = mockUsers.find(u => u.id === userId);
+                        if (user) {
+                            responseData = user;
+                        } else {
+                            responseData = { error: 'User not found' };
+                            statusCode = 404;
+                        }
+                    } else if (endpoint === '/api/data') {
+                        responseData = mockData;
+                    } else if (endpoint.match(/^\/api\/data\/\d+$/)) {
+                         const dataId = parseInt(endpoint.split('/').pop());
+                         const dataEntry = mockData.find(d => d.id === dataId);
+                         if (dataEntry) {
+                            responseData = dataEntry;
+                         } else {
+                             responseData = { error: 'Data entry not found' };
+                             statusCode = 404;
+                         }
+                    } else {
+                        responseData = { error: 'Endpoint not found' };
+                        statusCode = 404;
+                    }
+                    break;
+                case 'POST':
+                    if (endpoint === '/api/users') {
+                        try {
+                            const userData = JSON.parse(body);
+                            const newId = mockUsers.length > 0 ? Math.max(...mockUsers.map(u => u.id)) + 1 : 1;
+                            const newUser = { id: newId, ...userData };
+                            mockUsers.push(newUser);
+                            responseData = { message: 'User created successfully', ...newUser };
+                            statusCode = 201; // Created
+                        } catch (e) {
+                             responseData = { error: 'Invalid JSON or user data' };
+                             statusCode = 400;
+                        }
+
+                    } else if (endpoint === '/api/data') {
+                         try {
+                            const dataEntryData = JSON.parse(body);
+                            const newId = mockData.length > 0 ? Math.max(...mockData.map(d => d.id)) + 1 : 1;
+                            const newDataEntry = { id: newId, ...dataEntryData };
+                            mockData.push(newDataEntry);
+                            responseData = { message: 'Data entry created successfully', ...newDataEntry };
+                            statusCode = 201; // Created
+                         } catch (e) {
+                            responseData = { error: 'Invalid JSON or data entry data' };
+                            statusCode = 400;
+                         }
+                    }
+                     else {
+                        responseData = { error: 'Endpoint not found for POST' };
+                        statusCode = 404;
+                    }
+                    break;
+                case 'PUT':
+                    if (endpoint.match(/^\/api\/users\/\d+$/)) {
+                         try {
+                            const userId = parseInt(endpoint.split('/').pop());
+                            const userData = JSON.parse(body);
+                            const userIndex = mockUsers.findIndex(u => u.id === userId);
+                            if (userIndex !== -1) {
+                                mockUsers[userIndex] = { ...mockUsers[userIndex], ...userData };
+                                responseData = { message: 'User updated successfully', ...mockUsers[userIndex] };
+                                statusCode = 200;
+                            } else {
+                                responseData = { error: 'User not found' };
+                                statusCode = 404;
+                            }
+                         } catch (e) {
+                            responseData = { error: 'Invalid JSON or user data' };
+                            statusCode = 400;
+                         }
+                    } else if (endpoint.match(/^\/api\/data\/\d+$/)) {
+                         try {
+                            const dataId = parseInt(endpoint.split('/').pop());
+                            const dataEntryData = JSON.parse(body);
+                            const dataIndex = mockData.findIndex(d => d.id === dataId);
+                            if (dataIndex !== -1) {
+                                mockData[dataIndex] = { ...mockData[dataIndex], ...dataEntryData };
+                                responseData = { message: 'Data entry updated successfully', ...mockData[dataIndex] };
+                                statusCode = 200;
+                            } else {
+                                responseData = { error: 'Data entry not found' };
+                                statusCode = 404;
+                            }
+                         } catch (e) {
+                            responseData = { error: 'Invalid JSON or data entry data' };
+                            statusCode = 400;
+                         }
+                    }
+                     else {
+                        responseData = { error: 'Endpoint not found for PUT' };
+                        statusCode = 404;
+                    }
+                    break;
+                case 'DELETE':
+                    if (endpoint.match(/^\/api\/users\/\d+$/)) {
+                         const userId = parseInt(endpoint.split('/').pop());
+                         const initialLength = mockUsers.length;
+                         mockUsers = mockUsers.filter(u => u.id !== userId);
+                         if (mockUsers.length < initialLength) {
+                            responseData = { message: `User with ID ${userId} deleted successfully` };
+                            statusCode = 200;
+                         } else {
+                             responseData = { error: 'User not found' };
+                             statusCode = 404;
+                         }
+                    } else if (endpoint.match(/^\/api\/data\/\d+$/)) {
+                         const dataId = parseInt(endpoint.split('/').pop());
+                         const initialLength = mockData.length;
+                         mockData = mockData.filter(d => d.id !== dataId);
+                         if (mockData.length < initialLength) {
+                             responseData = { message: `Data entry with ID ${dataId} deleted successfully` };
+                             statusCode = 200;
+                         } else {
+                             responseData = { error: 'Data entry not found' };
+                             statusCode = 404;
+                         }
+                    }
+                     else {
+                        responseData = { error: 'Endpoint not found for DELETE' };
+                        statusCode = 404;
+                    }
+                    break;
+            }
+            // --- End Simulation ---
+
+            // Simulate network delay (adjust as needed)
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            // Update response panel
+            const endTime = Date.now();
+            responseBodyElement.textContent = JSON.stringify(responseData, null, 2);
+            statusCodeElement.textContent = statusCode.toString();
+            responseTimeElement.textContent = (endTime - startTime).toString();
+
+            // Update the displayed data state after successful modification
+            if (statusCode >= 200 && statusCode < 300 && (method === 'POST' || method === 'PUT' || method === 'DELETE')) {
+                 updateDataStateDisplay();
+            }
+
+            // Add to history (only successful requests? or all? currently all)
+            addToHistory(method, endpoint, responseData, statusCode);
+
+        } catch (error) {
+            const endTime = Date.now();
+            responseBodyElement.textContent = JSON.stringify({ error: 'Request failed', details: error.message }, null, 2);
+            statusCodeElement.textContent = 'Error'; // Indicate a client-side error or simulation issue
+            responseTimeElement.textContent = (endTime - startTime).toString();
+             addToHistory(method, endpoint, { error: 'Request failed', details: error.message }, 'Error');
+        }
+
+        // Reset UI
+        sendButton.disabled = false;
+        sendButton.textContent = 'Send Request';
+    });
+
+    // Add request to history
+    function addToHistory(method, endpoint, response, status) {
+        const historyItem = document.createElement('div');
+        historyItem.className = 'history-item';
+        
+        const methodSpan = document.createElement('span');
+        methodSpan.className = `history-method ${method.toLowerCase()}`;
+        methodSpan.textContent = method;
+        
+        const endpointSpan = document.createElement('span');
+        endpointSpan.className = 'history-endpoint';
+        endpointSpan.textContent = endpoint;
+        
+        const timeSpan = document.createElement('span');
+        timeSpan.className = 'history-time';
+        timeSpan.textContent = new Date().toLocaleTimeString();
+        
+        historyItem.appendChild(methodSpan);
+        historyItem.appendChild(endpointSpan);
+        historyItem.appendChild(timeSpan);
+        
+        // Add click handler to replay request
+        historyItem.addEventListener('click', () => {
+            const methodBtn = document.querySelector(`.method-btn[data-method="${method}"]`);
+            methodBtn.click();
+            endpointInput.value = endpoint;
+            if (method === 'POST' || method === 'PUT') {
+                requestBodyInput.value = JSON.stringify(response, null, 2);
+            }
+        });
+        
+        historyList.insertBefore(historyItem, historyList.firstChild);
+    }
 });
