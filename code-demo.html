@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTTP Methods Code Demo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="code-demo.css">
+</head>
+<body>
+    <header>
+        <h1>HTTP Methods Code Demo</h1>
+        <p>See how each HTTP method works in real-time</p>
+    </header>
+
+    <main>
+        <div class="demo-container">
+            <div class="code-panel">
+                <div class="code-header">
+                    <h2>Code Execution</h2>
+                    <div class="method-selector">
+                        <button class="method-btn get active" data-method="GET">GET</button>
+                        <button class="method-btn post" data-method="POST">POST</button>
+                        <button class="method-btn put" data-method="PUT">PUT</button>
+                        <button class="method-btn delete" data-method="DELETE">DELETE</button>
+                    </div>
+                </div>
+                <div class="code-display">
+                    <pre id="code-output"><code>// Select a method to see its code execution</code></pre>
+                </div>
+            </div>
+
+            <div class="result-panel">
+                <h2>Result</h2>
+                <div class="result-display">
+                    <pre id="result-output">No result yet</pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="data-panel">
+            <h2>Current Data State</h2>
+            <div class="data-display">
+                <pre id="data-output">{
+    "users": [
+        { "id": 1, "name": "John Doe", "email": "john@example.com" },
+        { "id": 2, "name": "Jane Smith", "email": "jane@example.com" }
+    ]
+}</pre>
+            </div>
+        </div>
+    </main>
+
+    <script src="code-demo.js"></script>
+</body>
+</html> 
