@@ -859,7 +859,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Attach click listeners to all method buttons
     methodButtons.forEach(button => {
         button.addEventListener('click', function() { // Use a regular function to ensure 'this' is the button
-            console.log('Method button clicked:', this.dataset.method); // Log click
             methodButtons.forEach(btn => btn.classList.remove('active'));
             this.classList.add('active');
             
@@ -870,9 +869,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Search functionality
+    const searchInput = document.getElementById('search-input');
+    const endpoints = document.querySelectorAll('.http-endpoint');
+
+    if (searchInput && endpoints) { // Ensure elements exist before adding listener
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            
+            endpoints.forEach(endpoint => {
+                const path = endpoint.querySelector('.endpoint-path').textContent.toLowerCase();
+                const description = endpoint.querySelector('.endpoint-description').textContent.toLowerCase();
+                const method = endpoint.querySelector('.http-method').textContent.toLowerCase();
+                
+                if (path.includes(searchTerm) || 
+                  description.includes(searchTerm) || 
+                  method.includes(searchTerm)) {
+                  endpoint.style.display = 'flex';
+                } else {
+                  endpoint.style.display = 'none';
+                }
+            });
+        });
+    }
+
     // Send request
     sendButton.addEventListener('click', async () => {
-        console.log('Send Request button clicked'); // Log click
         const method = document.querySelector('.method-btn.active').dataset.method;
         const endpoint = endpointInput.value.trim();
         const body = requestBodyInput.value.trim();
@@ -947,7 +969,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         };
                          statusCode = 201; // Created
                     } catch (e) {
-                        console.error("POST Error: ", e); // Log the error
                         responseData = {
                             error: "Invalid JSON data",
                             status: "Error",
@@ -977,7 +998,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         };
                          statusCode = 200; // OK
                     } catch (e) {
-                        console.error("PUT Error: ", e); // Log the error
                         responseData = {
                             error: "Invalid JSON data",
                             status: "Error",
@@ -1024,8 +1044,6 @@ document.addEventListener('DOMContentLoaded', () => {
             addToHistory(method, endpoint, responseWithHeaders, statusCode);
 
         } catch (error) {
-            console.error("Send Request Error: ", error); // Log the error
-            const endTime = Date.now();
             responseData = {
                 error: "Request failed",
                 details: error.message,
