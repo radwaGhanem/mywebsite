@@ -1281,6 +1281,20 @@ header {
 .method-btn.put { background-color: #fca130; color: white; }
 .method-btn.delete { background-color: #f93e3e; color: white; }
 
+.method-btn.options {
+    background-color: #6b7280;
+    color: white;
+}
+
+.method-btn.options:hover {
+    background-color: #4b5563;
+}
+
+.method-btn.options.active {
+    background-color: #374151;
+    border-color: #1f2937;
+}
+
 .endpoint-input {
     margin-bottom: 1rem;
 }
